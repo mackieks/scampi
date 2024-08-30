@@ -1,6 +1,6 @@
 <picture> <source media="(prefers-color-scheme: dark)" srcset="images/logo.png"> <img src="images/logo_black.png" width="300"> </picture> 
 
-Scampi is a truly universal OSHW audio amp for portablizers.
+Scampi is a truly universal OSHW audio amp for portablizers. UNTESTED!
 
 <img src="images/scampi.png" width="800"> 
 
@@ -15,7 +15,7 @@ Features:
   
 <img src="images/layout.jpg" width="400">
 
-Hardware untested. Firmware needs to be written. Planned modes:
+Hardware UNTESTED! Firmware needs to be written. Planned modes:
 
 <img src="images/modes.jpg" width="341"> 
 
