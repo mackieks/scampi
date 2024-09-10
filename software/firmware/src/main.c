@@ -12,7 +12,6 @@
 // Initialize the GPIO pins
 static void gpio_init()
 {
-  
 }
 
 int main(void)
