@@ -144,8 +144,8 @@ static inline int i2c_read(uint8_t addr, uint8_t *buf, uint32_t len)
  * @param read_buf Buffer to read from the device
  * @param read_len Length of the read buffer
  */
-static inline int i2c_write_read(uint8_t addr, uint8_t *write_buf, uint32_t write_len,
-                                 uint8_t *read_buf, uint32_t read_len)
+static inline int i2c_write_read(uint8_t addr, uint8_t *write_buf, uint32_t write_len, uint8_t *read_buf,
+                                 uint32_t read_len)
 {
   struct i2c_msg msgs[] = {
       {

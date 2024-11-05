@@ -791,7 +791,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Audio:AudioJack4"
+		(symbol "Connector_Audio:AudioJack3_SwitchT"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -803,7 +803,7 @@
 					)
 				)
 			)
-			(property "Value" "AudioJack4"
+			(property "Value" "AudioJack3_SwitchT"
 				(at 0 6.35 0)
 				(effects
 					(font
@@ -829,7 +829,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Audio Jack, 4 Poles (TRRS)"
+			(property "Description" "Audio Jack, 3 Poles (Stereo / TRS), Switched T Pole (Normalling)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -838,7 +838,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "audio jack receptacle stereo headphones TRRS connector"
+			(property "ki_keywords" "audio jack receptacle stereo headphones phones TRS connector"
 				(at 0 0 0)
 				(effects
 					(font
@@ -856,10 +856,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "AudioJack4_0_1"
+			(symbol "AudioJack3_SwitchT_0_1"
 				(rectangle
-					(start -6.35 -5.08)
-					(end -7.62 -7.62)
+					(start -5.08 -5.08)
+					(end -6.35 -7.62)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -870,19 +870,7 @@
 				)
 				(polyline
 					(pts
-						(xy -5.715 -5.08) (xy -5.08 -5.715) (xy -4.445 -5.08) (xy -4.445 2.54) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 -5.08) (xy -1.27 -5.715) (xy -0.635 -5.08) (xy -0.635 -2.54) (xy 2.54 -2.54)
+						(xy -1.905 -5.08) (xy -1.27 -5.715) (xy -0.635 -5.08) (xy -0.635 0) (xy 2.54 0)
 					)
 					(stroke
 						(width 0.254)
@@ -904,9 +892,21 @@
 						(type none)
 					)
 				)
+				(polyline
+					(pts
+						(xy 1.778 -5.334) (xy 2.032 -5.842)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(rectangle
 					(start 2.54 3.81)
-					(end -6.35 -7.62)
+					(end -5.08 -10.16)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -917,7 +917,7 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 0) (xy -2.54 0) (xy -2.54 -5.08) (xy -3.175 -5.715) (xy -3.81 -5.08)
+						(xy 2.54 2.54) (xy -2.54 2.54) (xy -2.54 -5.08) (xy -3.175 -5.715) (xy -3.81 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -927,8 +927,20 @@
 						(type none)
 					)
 				)
+				(polyline
+					(pts
+						(xy 2.54 -7.62) (xy 1.778 -7.62) (xy 1.778 -5.334) (xy 1.524 -5.842)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 			)
-			(symbol "AudioJack4_1_1"
+			(symbol "AudioJack3_SwitchT_1_1"
 				(pin passive line
 					(at 5.08 2.54 180)
 					(length 2.54)
@@ -957,25 +969,7 @@
 							)
 						)
 					)
-					(number "R2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "R1"
+					(number "R"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -994,6 +988,24 @@
 						)
 					)
 					(number "T"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -7.62 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "TN"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1389,7 +1401,7 @@
 						(type default)
 					)
 					(fill
-						(type none)
+						(type outline)
 					)
 				)
 				(arc
@@ -1401,7 +1413,7 @@
 						(type default)
 					)
 					(fill
-						(type outline)
+						(type none)
 					)
 				)
 				(polyline
@@ -2245,14 +2257,14 @@
 				(pin passive line
 					(at 0 -5.08 0)
 					(length 5.08)
-					(name "A3"
+					(name "A2"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "4"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2263,14 +2275,14 @@
 				(pin passive line
 					(at 0 -7.62 0)
 					(length 5.08)
-					(name "A2"
+					(name "A3"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2862,12 +2874,6 @@
 		(uuid "5fbb00d0-6840-4907-9e55-bea549196194")
 	)
 	(junction
-		(at 165.1 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "72f1a072-fcda-4fea-9f86-1f6aecd5aee3")
-	)
-	(junction
 		(at 151.13 59.69)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2914,6 +2920,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b7577aa2-f785-42ae-bcf5-b9e254e4f9e3")
+	)
+	(junction
+		(at 162.56 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bc396242-3115-4fd9-8e56-8123d609efcb")
 	)
 	(junction
 		(at 129.54 59.69)
@@ -3033,7 +3045,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 101.6) (xy 168.91 101.6)
+			(xy 158.75 101.6) (xy 161.29 101.6)
 		)
 		(stroke
 			(width 0)
@@ -3070,16 +3082,6 @@
 			(type default)
 		)
 		(uuid "0f1839b7-2d3b-4d48-90f1-4ff2012c9f8b")
-	)
-	(wire
-		(pts
-			(xy 158.75 86.36) (xy 161.29 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0fc43030-4c7f-43ce-b00d-fc767cba085d")
 	)
 	(wire
 		(pts
@@ -3120,16 +3122,6 @@
 			(type default)
 		)
 		(uuid "127c26ec-74ee-4512-959f-a65970de5c57")
-	)
-	(wire
-		(pts
-			(xy 158.75 97.79) (xy 165.1 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "12b4898a-30fd-4f25-84c4-05482acb347f")
 	)
 	(wire
 		(pts
@@ -3223,7 +3215,7 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 104.14) (xy 151.13 106.68)
+			(xy 149.86 104.14) (xy 149.86 106.68)
 		)
 		(stroke
 			(width 0)
@@ -3283,6 +3275,26 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 96.52) (xy 149.86 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "264e1873-6b2f-4a46-94e1-6a0636c1533d")
+	)
+	(wire
+		(pts
+			(xy 173.99 96.52) (xy 173.99 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "267dde4f-8ba6-42b6-bb81-e54e6de619a9")
+	)
+	(wire
+		(pts
 			(xy 208.28 86.36) (xy 208.28 90.17)
 		)
 		(stroke
@@ -3290,6 +3302,16 @@
 			(type default)
 		)
 		(uuid "26a33747-cdd3-4118-a8fe-8120cb1b02a6")
+	)
+	(wire
+		(pts
+			(xy 173.99 93.98) (xy 171.45 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "275b0a34-f497-4535-89e9-f70d33f86126")
 	)
 	(wire
 		(pts
@@ -3353,7 +3375,7 @@
 	)
 	(wire
 		(pts
-			(xy 180.34 118.11) (xy 182.88 118.11)
+			(xy 181.61 118.11) (xy 184.15 118.11)
 		)
 		(stroke
 			(width 0)
@@ -3373,16 +3395,6 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 90.17) (xy 153.67 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "36dbaf98-80f9-4d11-b494-09cff526ac02")
-	)
-	(wire
-		(pts
 			(xy 33.02 119.38) (xy 33.02 116.84)
 		)
 		(stroke
@@ -3390,16 +3402,6 @@
 			(type default)
 		)
 		(uuid "38176736-c0ce-4ff1-940d-b94bc916030d")
-	)
-	(wire
-		(pts
-			(xy 161.29 86.36) (xy 161.29 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "381c7387-2a4c-4543-928a-b0667a019101")
 	)
 	(wire
 		(pts
@@ -3413,7 +3415,7 @@
 	)
 	(wire
 		(pts
-			(xy 180.34 115.57) (xy 182.88 115.57)
+			(xy 181.61 125.73) (xy 184.15 125.73)
 		)
 		(stroke
 			(width 0)
@@ -3470,16 +3472,6 @@
 			(type default)
 		)
 		(uuid "41cfe818-a2a6-46a0-995e-a7269643cd29")
-	)
-	(wire
-		(pts
-			(xy 158.75 90.17) (xy 168.91 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "42f4cbc9-b9b5-4db7-9655-b5c98e48d49a")
 	)
 	(wire
 		(pts
@@ -3543,16 +3535,6 @@
 	)
 	(wire
 		(pts
-			(xy 168.91 93.98) (xy 165.1 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4497fc19-2f4b-4364-b7e2-d33ac642eb54")
-	)
-	(wire
-		(pts
 			(xy 208.28 73.66) (xy 210.82 73.66)
 		)
 		(stroke
@@ -3570,6 +3552,16 @@
 			(type default)
 		)
 		(uuid "47436203-837c-4abf-89b8-0578f92d7de1")
+	)
+	(wire
+		(pts
+			(xy 146.05 93.98) (xy 162.56 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "47a81719-5901-48c7-8015-1a3048c586e0")
 	)
 	(wire
 		(pts
@@ -3623,7 +3615,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 104.14) (xy 151.13 104.14)
+			(xy 146.05 104.14) (xy 149.86 104.14)
 		)
 		(stroke
 			(width 0)
@@ -3633,43 +3625,23 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 87.63) (xy 168.91 87.63)
+			(xy 162.56 93.98) (xy 166.37 93.98)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "50271833-8e48-464a-b654-b676dc561ba4")
+		(uuid "544554d0-90ab-4616-8143-b311721f883a")
 	)
 	(wire
 		(pts
-			(xy 149.86 99.06) (xy 146.05 99.06)
+			(xy 148.59 90.17) (xy 146.05 90.17)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "516ae3e5-33ba-4e6f-bec3-fc7c039ec70d")
-	)
-	(wire
-		(pts
-			(xy 153.67 97.79) (xy 149.86 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "531f8f30-581b-47ed-b93c-e2a26d63f331")
-	)
-	(wire
-		(pts
-			(xy 152.4 87.63) (xy 146.05 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "562fe6ea-f119-47b2-8bcd-e4b124390226")
+		(uuid "55b5e3e1-d750-46d6-bcd4-15e932b1d849")
 	)
 	(wire
 		(pts
@@ -3713,7 +3685,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 104.14) (xy 168.91 104.14)
+			(xy 161.29 105.41) (xy 166.37 105.41)
 		)
 		(stroke
 			(width 0)
@@ -3883,7 +3855,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 106.68) (xy 161.29 104.14)
+			(xy 161.29 106.68) (xy 161.29 105.41)
 		)
 		(stroke
 			(width 0)
@@ -3983,6 +3955,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 101.6) (xy 161.29 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83b6eced-6a6a-4103-87b6-602dffeb7646")
+	)
+	(wire
+		(pts
 			(xy 129.54 58.42) (xy 129.54 59.69)
 		)
 		(stroke
@@ -4040,6 +4022,16 @@
 			(type default)
 		)
 		(uuid "8d43f7f1-8d93-45ec-8930-53647a1e3f06")
+	)
+	(wire
+		(pts
+			(xy 148.59 87.63) (xy 146.05 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e599753-90ad-42ed-9476-f19381da7353")
 	)
 	(wire
 		(pts
@@ -4113,6 +4105,16 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 96.52) (xy 173.99 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99ec23b5-74c3-4ae8-81e9-cac0e645f6d0")
+	)
+	(wire
+		(pts
 			(xy 72.39 147.32) (xy 78.74 147.32)
 		)
 		(stroke
@@ -4143,7 +4145,17 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 121.92) (xy 175.26 113.03)
+			(xy 161.29 102.87) (xy 166.37 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d15a02f-26fb-467c-9549-8043086ba2c6")
+	)
+	(wire
+		(pts
+			(xy 176.53 127) (xy 176.53 115.57)
 		)
 		(stroke
 			(width 0)
@@ -4180,16 +4192,6 @@
 			(type default)
 		)
 		(uuid "a13ad1cd-5ce2-4b2d-8c25-9aa7ab21e699")
-	)
-	(wire
-		(pts
-			(xy 152.4 86.36) (xy 153.67 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a68b89e9-0099-41ef-a307-315ff42fbf14")
 	)
 	(wire
 		(pts
@@ -4263,7 +4265,7 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 106.68) (xy 153.67 106.68)
+			(xy 149.86 106.68) (xy 153.67 106.68)
 		)
 		(stroke
 			(width 0)
@@ -4403,16 +4405,6 @@
 	)
 	(wire
 		(pts
-			(xy 165.1 97.79) (xy 165.1 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c9f153ec-6b75-467f-ba06-f283080e3398")
-	)
-	(wire
-		(pts
 			(xy 120.65 109.22) (xy 120.65 111.76)
 		)
 		(stroke
@@ -4483,7 +4475,17 @@
 	)
 	(wire
 		(pts
-			(xy 175.26 113.03) (xy 182.88 113.03)
+			(xy 146.05 99.06) (xy 149.86 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dac724f2-fddf-4b34-9af1-748da083e9e0")
+	)
+	(wire
+		(pts
+			(xy 176.53 115.57) (xy 184.15 115.57)
 		)
 		(stroke
 			(width 0)
@@ -4530,26 +4532,6 @@
 			(type default)
 		)
 		(uuid "e8eebd8d-d19c-4bce-a52b-22838b07ac68")
-	)
-	(wire
-		(pts
-			(xy 149.86 97.79) (xy 149.86 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e9b89abf-874d-4061-9a4a-7574b27ced40")
-	)
-	(wire
-		(pts
-			(xy 152.4 86.36) (xy 152.4 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea77ae15-18eb-482d-a207-afd5729279ab")
 	)
 	(wire
 		(pts
@@ -4663,16 +4645,6 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 93.98) (xy 165.1 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f5d1405b-2d20-4af9-84f2-8e23d1f4a84c")
-	)
-	(wire
-		(pts
 			(xy 123.19 63.5) (xy 123.19 68.58)
 		)
 		(stroke
@@ -4733,7 +4705,7 @@
 	)
 	(wire
 		(pts
-			(xy 180.34 120.65) (xy 182.88 120.65)
+			(xy 181.61 123.19) (xy 184.15 123.19)
 		)
 		(stroke
 			(width 0)
@@ -5397,7 +5369,7 @@
 		)
 	)
 	(label "HPR"
-		(at 168.91 90.17 0)
+		(at 147.32 90.17 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5408,7 +5380,7 @@
 		(uuid "022a2a02-4f6b-4978-afba-7fb6a63e7eca")
 	)
 	(label "HPL"
-		(at 180.34 120.65 180)
+		(at 181.61 123.19 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5419,7 +5391,7 @@
 		(uuid "2b3e02a6-071a-4df3-91a0-99e9f386f614")
 	)
 	(label "HPR"
-		(at 180.34 118.11 180)
+		(at 181.61 118.11 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5485,7 +5457,7 @@
 		(uuid "9db07372-c4d6-4531-a041-f072b4864c0b")
 	)
 	(label "HPS"
-		(at 180.34 115.57 180)
+		(at 181.61 125.73 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5518,7 +5490,7 @@
 		(uuid "d61cb1fe-3a14-44c3-a080-d3e82b8cd20e")
 	)
 	(label "HPS"
-		(at 168.91 93.98 0)
+		(at 156.21 93.98 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5540,7 +5512,7 @@
 		(uuid "f0dece64-9aae-41e3-b775-257b411fbe07")
 	)
 	(label "HPL"
-		(at 168.91 87.63 0)
+		(at 147.32 87.63 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5757,7 +5729,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "028fda2e-7ed3-46b2-a812-240950c2300c")
-		(property "Reference" "TP2"
+		(property "Reference" "TP16"
 			(at 22.86 114.3 90)
 			(effects
 				(font
@@ -5825,7 +5797,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP2")
+					(reference "TP16")
 					(unit 1)
 				)
 			)
@@ -5840,7 +5812,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "02fd4038-54cb-458a-88dd-b896c1ea53b1")
-		(property "Reference" "TP7"
+		(property "Reference" "TP3"
 			(at 38.1 96.52 90)
 			(effects
 				(font
@@ -5908,7 +5880,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP7")
+					(reference "TP3")
 					(unit 1)
 				)
 			)
@@ -5924,7 +5896,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "03dd05b5-14b6-4705-9fe6-996a8d1e6547")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR015"
 			(at 109.22 158.75 0)
 			(effects
 				(font
@@ -5974,7 +5946,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR017")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -5982,15 +5954,15 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 168.91 101.6 270)
+		(at 166.37 102.87 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "05f45085-0acb-4c85-8eb2-b429d32d8bee")
-		(property "Reference" "TP12"
-			(at 176.53 101.6 90)
+		(property "Reference" "TP8"
+			(at 173.99 102.87 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5998,7 +5970,7 @@
 			)
 		)
 		(property "Value" "~"
-			(at 177.292 101.6 0)
+			(at 174.752 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6007,7 +5979,7 @@
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:pth_pad"
-			(at 168.91 106.68 0)
+			(at 166.37 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6016,7 +5988,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 168.91 106.68 0)
+			(at 166.37 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6025,7 +5997,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 168.91 101.6 0)
+			(at 166.37 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6034,7 +6006,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 168.91 101.6 0)
+			(at 166.37 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6043,7 +6015,7 @@
 			)
 		)
 		(property "Digi-Key Part #" ""
-			(at 168.91 101.6 0)
+			(at 166.37 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6057,7 +6029,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP12")
+					(reference "TP8")
 					(unit 1)
 				)
 			)
@@ -6142,7 +6114,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0cfda549-464d-44e6-94a7-19791bee4430")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR010"
 			(at 82.55 86.36 0)
 			(effects
 				(font
@@ -6192,7 +6164,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR011")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -6207,7 +6179,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0e1f8024-809c-4a2f-af60-3f47786896c8")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR012"
 			(at 109.22 132.08 0)
 			(effects
 				(font
@@ -6257,7 +6229,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR014")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -6273,7 +6245,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0e995896-5b2e-476b-b538-53e618951169")
-		(property "Reference" "R4"
+		(property "Reference" "R3"
 			(at 204.6986 53.3978 0)
 			(effects
 				(font
@@ -6327,7 +6299,90 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "R4")
+					(reference "R3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 148.59 90.17 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1166287e-fe6b-4612-ba79-3ab440a0ced9")
+		(property "Reference" "HPR1"
+			(at 156.464 90.17 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~"
+			(at 156.972 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "SamacSys_Parts:pth_pad"
+			(at 148.59 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 148.59 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 148.59 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 148.59 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Digi-Key Part #" ""
+			(at 148.59 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "22b51849-39e1-4c42-9041-0eea989d6567")
+		)
+		(instances
+			(project "scampi"
+				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
+					(reference "HPR1")
 					(unit 1)
 				)
 			)
@@ -6342,7 +6397,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "17f7a97e-6765-4252-84b5-136ac62af7ca")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR039"
 			(at 99.06 67.31 0)
 			(effects
 				(font
@@ -6392,7 +6447,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR013")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -6408,7 +6463,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "19ced044-a425-4083-baf9-6b301d4551ce")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR06"
 			(at 62.23 166.37 0)
 			(effects
 				(font
@@ -6458,7 +6513,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR07")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -6718,7 +6773,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1e5881cb-3c6e-4cc3-b55c-753f986c8800")
-		(property "Reference" "TP9"
+		(property "Reference" "TP5"
 			(at 38.1 101.6 90)
 			(effects
 				(font
@@ -6786,7 +6841,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP9")
+					(reference "TP5")
 					(unit 1)
 				)
 			)
@@ -6801,7 +6856,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1ef619f7-bd56-4acc-90fd-e5049d444c8c")
-		(property "Reference" "TP18"
+		(property "Reference" "TP14"
 			(at 264.16 90.17 90)
 			(effects
 				(font
@@ -6869,7 +6924,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP18")
+					(reference "TP14")
 					(unit 1)
 				)
 			)
@@ -6884,7 +6939,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "25b1da8d-3b34-43f4-91c3-071d29310425")
-		(property "Reference" "#PWR010"
+		(property "Reference" "#PWR09"
 			(at 78.74 149.86 0)
 			(effects
 				(font
@@ -6934,7 +6989,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR010")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -7020,7 +7075,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2c09c789-3611-458e-a508-af655bf6e20e")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR020"
 			(at 119.38 158.75 0)
 			(effects
 				(font
@@ -7070,7 +7125,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR022")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -7141,6 +7196,89 @@
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
 					(reference "C10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 162.56 93.98 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2ceb8ad4-854c-4666-bbb1-90b49c5f415d")
+		(property "Reference" "DET1"
+			(at 162.56 88.392 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~"
+			(at 162.56 85.598 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "SamacSys_Parts:pth_pad"
+			(at 167.64 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 167.64 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" ""
+			(at 162.56 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Digi-Key Part #" ""
+			(at 162.56 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0e1e0a9c-ae9b-466a-a791-63112b38a143")
+		)
+		(instances
+			(project "scampi"
+				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
+					(reference "DET1")
 					(unit 1)
 				)
 			)
@@ -7309,7 +7447,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "369087ac-14b2-48db-bfab-11d9d56bc132")
-		(property "Reference" "#PWR09"
+		(property "Reference" "#PWR08"
 			(at 71.12 125.73 0)
 			(effects
 				(font
@@ -7359,7 +7497,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR09")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -7374,7 +7512,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "370787ac-04c8-425d-bdb0-2a798745e880")
-		(property "Reference" "TP16"
+		(property "Reference" "TP12"
 			(at 264.16 60.96 90)
 			(effects
 				(font
@@ -7442,7 +7580,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP16")
+					(reference "TP12")
 					(unit 1)
 				)
 			)
@@ -7457,7 +7595,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3b56ec01-920d-49ab-99bd-88f510a67182")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR07"
 			(at 71.12 118.11 0)
 			(effects
 				(font
@@ -7507,7 +7645,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR08")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -7522,7 +7660,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3c5982af-613c-4d43-9458-702478b97df0")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR011"
 			(at 86.36 92.71 0)
 			(effects
 				(font
@@ -7572,7 +7710,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR012")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -7587,7 +7725,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "40e24fa6-4d68-477e-80d3-1a1238255b51")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR037"
 			(at 109.22 170.18 0)
 			(effects
 				(font
@@ -7637,7 +7775,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR018")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -7652,7 +7790,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4436249d-31e2-4486-81cf-9c2b524ceefd")
-		(property "Reference" "#PWR05"
+		(property "Reference" "#PWR04"
 			(at 59.69 118.11 0)
 			(effects
 				(font
@@ -7702,40 +7840,40 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR05")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector_Audio:AudioJack4")
-		(at 187.96 115.57 0)
-		(mirror y)
+		(lib_id "Connector:TestPoint")
+		(at 148.59 87.63 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "468cf6c9-7c16-49cb-b8d8-079de7571ce9")
-		(property "Reference" "J2"
-			(at 190.5 107.6155 0)
+		(uuid "48df6f20-acce-4891-b7dd-3adc401ffed4")
+		(property "Reference" "HPL1"
+			(at 156.21 87.63 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "PJ-320D"
-			(at 190.5 110.0398 0)
+		(property "Value" "~"
+			(at 156.972 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Footprint" "SamacSys_Parts:Jack_3.5mm_PJ320D_Horizontal"
-			(at 187.96 115.57 0)
+		(property "Footprint" "SamacSys_Parts:pth_pad"
+			(at 148.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7744,7 +7882,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 187.96 115.57 0)
+			(at 148.59 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7752,8 +7890,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Audio Jack, 4 Poles (TRRS)"
-			(at 187.96 115.57 0)
+		(property "Description" ""
+			(at 148.59 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7761,22 +7899,31 @@
 				(hide yes)
 			)
 		)
-		(pin "R1"
-			(uuid "f4ca7a13-e3aa-445a-b099-b90d26d60717")
+		(property "MPN" ""
+			(at 148.59 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
-		(pin "S"
-			(uuid "c558274b-852d-479d-8cfc-10a9fb85e677")
+		(property "Digi-Key Part #" ""
+			(at 148.59 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
-		(pin "R2"
-			(uuid "9d84407a-2f7f-4fad-abf2-67a5e3216b57")
-		)
-		(pin "T"
-			(uuid "1015ee90-f6ef-4958-9d47-11ad854a4e07")
+		(pin "1"
+			(uuid "a82a4603-62e2-4290-aecd-bd51cf82ee78")
 		)
 		(instances
-			(project ""
+			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "J2")
+					(reference "HPL1")
 					(unit 1)
 				)
 			)
@@ -7875,7 +8022,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4e174553-cd1c-4a78-bbd5-d854a507b1e1")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR033"
 			(at 199.39 52.07 0)
 			(effects
 				(font
@@ -7925,7 +8072,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR036")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -7941,7 +8088,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4f769000-68c4-4f6c-a00c-6eeb8219d5c3")
-		(property "Reference" "C13"
+		(property "Reference" "C16"
 			(at 153.67 60.9662 0)
 			(effects
 				(font
@@ -7995,7 +8142,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C13")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -8003,15 +8150,15 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 168.91 104.14 270)
+		(at 166.37 105.41 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "50f32b43-67e3-4863-8d42-b2dc095be8a9")
-		(property "Reference" "TP13"
-			(at 176.53 104.14 90)
+		(property "Reference" "TP9"
+			(at 173.99 105.41 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8019,7 +8166,7 @@
 			)
 		)
 		(property "Value" "~"
-			(at 177.292 104.14 0)
+			(at 174.752 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8028,7 +8175,7 @@
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:pth_pad"
-			(at 168.91 109.22 0)
+			(at 166.37 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8037,7 +8184,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 168.91 109.22 0)
+			(at 166.37 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8046,7 +8193,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 168.91 104.14 0)
+			(at 166.37 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8055,7 +8202,7 @@
 			)
 		)
 		(property "MPN" ""
-			(at 168.91 104.14 0)
+			(at 166.37 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8064,7 +8211,7 @@
 			)
 		)
 		(property "Digi-Key Part #" ""
-			(at 168.91 104.14 0)
+			(at 166.37 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8078,7 +8225,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP13")
+					(reference "TP9")
 					(unit 1)
 				)
 			)
@@ -8253,7 +8400,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "54252f54-bdab-43c3-861b-3d399bb87e79")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR021"
 			(at 119.38 170.18 0)
 			(effects
 				(font
@@ -8303,40 +8450,42 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR023")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
-		(at 156.21 97.79 270)
-		(mirror x)
+		(lib_id "Connector_Audio:AudioJack3_SwitchT")
+		(at 189.23 118.11 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "57017975-f641-4d8c-81d4-035699d95e04")
-		(property "Reference" "R2"
-			(at 153.416 95.758 90)
+		(uuid "56e77b95-0324-4d3d-9b7c-2ce64d0685d2")
+		(property "Reference" "J1"
+			(at 183.134 130.302 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
-		(property "Value" "100k"
-			(at 159.512 95.758 90)
+		(property "Value" "AudioJack3_SwitchT"
+			(at 183.134 132.842 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 156.21 97.79 0)
+		(property "Footprint" "Connector_Audio:Jack_3.5mm_CUI_SJ-3524-SMT_Horizontal"
+			(at 189.23 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8345,7 +8494,81 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 156.21 97.79 0)
+			(at 189.23 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Audio Jack, 3 Poles (Stereo / TRS), Switched T Pole (Normalling)"
+			(at 189.23 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "T"
+			(uuid "d26dd8b2-2886-49d3-8fe4-109964130321")
+		)
+		(pin "S"
+			(uuid "68ca2ab4-f5cc-41d8-a3cf-2148ac34fa88")
+		)
+		(pin "R"
+			(uuid "e2e2a52f-62e9-4aef-ad44-c23a7ae25739")
+		)
+		(pin "TN"
+			(uuid "86370387-e9a5-4b6c-8a2a-76aaf4fae6be")
+		)
+		(instances
+			(project ""
+				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 168.91 93.98 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "57017975-f641-4d8c-81d4-035699d95e04")
+		(property "Reference" "R1"
+			(at 168.91 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100k"
+			(at 168.91 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 168.91 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 168.91 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8354,7 +8577,7 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
-			(at 156.21 97.79 0)
+			(at 168.91 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8371,7 +8594,7 @@
 		(instances
 			(project ""
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "R2")
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -8386,7 +8609,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5f75e330-26d2-4b5d-8b88-257f40f92c7d")
-		(property "Reference" "TP3"
+		(property "Reference" "TP17"
 			(at 22.86 116.84 90)
 			(effects
 				(font
@@ -8454,7 +8677,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP3")
+					(reference "TP17")
 					(unit 1)
 				)
 			)
@@ -8469,7 +8692,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "61015ff9-40eb-4739-b093-28cd6d2da7d5")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR023"
 			(at 120.65 62.23 0)
 			(effects
 				(font
@@ -8519,7 +8742,7 @@
 		(instances
 			(project ""
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR025")
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -8535,8 +8758,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "68775a5b-8cc9-44b4-8046-b2657f295433")
-		(property "Reference" "C16"
-			(at 150.876 103.378 90)
+		(property "Reference" "C13"
+			(at 151.13 99.314 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8544,8 +8767,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "1µF"
-			(at 157.48 103.124 90)
+		(property "Value" "0.47µF"
+			(at 157.48 99.314 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8589,7 +8812,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C16")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -8730,7 +8953,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6b7cc29a-d918-4e51-812a-0a904e1a2599")
-		(property "Reference" "TP15"
+		(property "Reference" "TP11"
 			(at 167.64 63.5 90)
 			(effects
 				(font
@@ -8798,7 +9021,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP15")
+					(reference "TP11")
 					(unit 1)
 				)
 			)
@@ -8813,7 +9036,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6b9822eb-3163-4707-891d-6711291b22ec")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR026"
 			(at 129.54 62.23 0)
 			(effects
 				(font
@@ -8863,7 +9086,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR028")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -8879,7 +9102,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6bf2dfd5-2ae6-476e-aff0-8614d75ad067")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR016"
 			(at 33.02 125.73 0)
 			(effects
 				(font
@@ -8929,7 +9152,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR01")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -9014,7 +9237,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "747356eb-cf1d-4fca-8690-2295bd2d25fc")
-		(property "Reference" "TP5"
+		(property "Reference" "TP1"
 			(at 38.1 91.44 90)
 			(effects
 				(font
@@ -9082,7 +9305,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP5")
+					(reference "TP1")
 					(unit 1)
 				)
 			)
@@ -9098,7 +9321,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7543de7c-0940-4e88-9207-550aebe9a6fa")
-		(property "Reference" "R3"
+		(property "Reference" "R2"
 			(at 197.8914 53.3978 0)
 			(effects
 				(font
@@ -9152,7 +9375,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "R3")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -9251,7 +9474,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7e009139-b179-4b78-a03d-e6254d77bab9")
-		(property "Reference" "C18"
+		(property "Reference" "C15"
 			(at 248.92 70.866 0)
 			(effects
 				(font
@@ -9305,7 +9528,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C18")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -9321,7 +9544,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "80974105-659b-4c66-95e0-9147ebae2384")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR03"
 			(at 49.53 114.3 0)
 			(effects
 				(font
@@ -9371,7 +9594,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR04")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -9387,7 +9610,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "80aca972-49c7-4512-9bc8-3a7ce4703441")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR013"
 			(at 109.22 139.7 0)
 			(effects
 				(font
@@ -9437,7 +9660,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR015")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -9453,7 +9676,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "81591455-9943-4f22-b2e7-6b0d5053a7c8")
-		(property "Reference" "R1"
+		(property "Reference" "R4"
 			(at 93.98 67.31 90)
 			(effects
 				(font
@@ -9505,7 +9728,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "R1")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -9660,7 +9883,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8edf0dca-88a8-48cf-8604-3669840ff664")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR028"
 			(at 135.89 132.08 0)
 			(effects
 				(font
@@ -9710,7 +9933,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR030")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -9725,7 +9948,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9000f34c-1949-4d74-8108-398c69f38367")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR030"
 			(at 147.32 132.08 0)
 			(effects
 				(font
@@ -9775,7 +9998,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR032")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -9790,7 +10013,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "98357c28-8a05-4407-adba-f40a0ab0b92d")
-		(property "Reference" "C17"
+		(property "Reference" "C14"
 			(at 151.13 108.966 90)
 			(effects
 				(font
@@ -9799,7 +10022,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "1µF"
+		(property "Value" "0.47µF"
 			(at 157.48 108.966 90)
 			(effects
 				(font
@@ -9844,7 +10067,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C17")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -9860,7 +10083,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "999a6eb6-8ff2-4300-9044-953410c96a9e")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR05"
 			(at 59.69 125.73 0)
 			(effects
 				(font
@@ -9910,7 +10133,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR06")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -9996,7 +10219,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a1c16d16-8e4c-4632-a45d-4296ea7b01f0")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR035"
 			(at 246.38 96.52 0)
 			(effects
 				(font
@@ -10065,7 +10288,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR039")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -10080,7 +10303,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a24c2e2d-066e-42c4-a98f-1e896f0ed053")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR02"
 			(at 49.53 91.44 0)
 			(effects
 				(font
@@ -10130,7 +10353,7 @@
 		(instances
 			(project ""
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR03")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -10146,7 +10369,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a466f82c-dfc5-4879-8e7d-ff6c9ce6752d")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR027"
 			(at 130.81 119.38 0)
 			(effects
 				(font
@@ -10196,7 +10419,7 @@
 		(instances
 			(project ""
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR029")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -10365,7 +10588,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aba3db8b-721b-46bc-963c-e80db98decf2")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR029"
 			(at 135.89 139.7 0)
 			(effects
 				(font
@@ -10415,7 +10638,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR031")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -10430,7 +10653,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ae0701f2-b8c7-4d72-8888-b6a04876635b")
-		(property "Reference" "TP10"
+		(property "Reference" "TP6"
 			(at 38.1 104.14 90)
 			(effects
 				(font
@@ -10498,7 +10721,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP10")
+					(reference "TP6")
 					(unit 1)
 				)
 			)
@@ -10513,7 +10736,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "af15f4db-ea9c-4624-a840-1caf015bf152")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR018"
 			(at 118.11 66.04 0)
 			(effects
 				(font
@@ -10563,7 +10786,7 @@
 		(instances
 			(project ""
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR020")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -10578,7 +10801,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b6a63225-a068-460f-8c10-00bf90b20e78")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR014"
 			(at 109.22 151.13 0)
 			(effects
 				(font
@@ -10628,7 +10851,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR016")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -10644,7 +10867,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b7612072-0774-4a4c-aa4a-c6ae10cacde9")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR036"
 			(at 151.13 71.12 0)
 			(effects
 				(font
@@ -10694,7 +10917,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR034")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -10779,7 +11002,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "badc68f0-72ff-4ef6-9172-8244977afe1a")
-		(property "Reference" "TP17"
+		(property "Reference" "TP13"
 			(at 264.16 86.36 90)
 			(effects
 				(font
@@ -10847,7 +11070,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP17")
+					(reference "TP13")
 					(unit 1)
 				)
 			)
@@ -10863,7 +11086,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "baf95242-9748-4686-9393-33d4c5a591e0")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR040"
 			(at 208.28 96.52 0)
 			(effects
 				(font
@@ -10932,7 +11155,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR037")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -10949,7 +11172,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bc9bd1e7-a386-4cce-85cf-b93c5bad989a")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR032"
 			(at 279.4 88.9 0)
 			(effects
 				(font
@@ -11018,7 +11241,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR040")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -11173,7 +11396,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c1952001-f5dc-4fc8-b9bf-e223a0a91f95")
-		(property "Reference" "TP6"
+		(property "Reference" "TP2"
 			(at 38.1 93.98 90)
 			(effects
 				(font
@@ -11241,7 +11464,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP6")
+					(reference "TP2")
 					(unit 1)
 				)
 			)
@@ -11256,7 +11479,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c55b7d70-897d-40de-884e-b924b5d7e5f5")
-		(property "Reference" "TP4"
+		(property "Reference" "TP18"
 			(at 26.67 147.32 90)
 			(effects
 				(font
@@ -11324,7 +11547,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP4")
+					(reference "TP18")
 					(unit 1)
 				)
 			)
@@ -11339,7 +11562,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c6fbf13d-f839-4f9b-806e-838ed1d2d281")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR019"
 			(at 119.38 151.13 0)
 			(effects
 				(font
@@ -11389,7 +11612,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR021")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -11404,7 +11627,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c72f09e3-288a-4d5d-9381-14114a1bc9d5")
-		(property "Reference" "TP11"
+		(property "Reference" "TP7"
 			(at 95.25 104.14 90)
 			(effects
 				(font
@@ -11472,7 +11695,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP11")
+					(reference "TP7")
 					(unit 1)
 				)
 			)
@@ -11488,7 +11711,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c8e92f88-33f5-44c0-b1e1-f34fbdf6393c")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR025"
 			(at 120.65 139.7 0)
 			(effects
 				(font
@@ -11538,7 +11761,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR027")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -11623,7 +11846,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d3de45f3-0c2d-48eb-939f-2cdc9f72d725")
-		(property "Reference" "#PWR026"
+		(property "Reference" "#PWR024"
 			(at 120.65 132.08 0)
 			(effects
 				(font
@@ -11673,7 +11896,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR026")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -11681,7 +11904,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 175.26 121.92 0)
+		(at 176.53 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11689,8 +11912,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d4c84b91-1a91-4937-bf5f-6cfeecf59056")
-		(property "Reference" "#PWR035"
-			(at 175.26 128.27 0)
+		(property "Reference" "#PWR017"
+			(at 176.53 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11699,7 +11922,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 175.26 127 0)
+			(at 176.53 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11707,7 +11930,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 175.26 121.92 0)
+			(at 176.53 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11716,7 +11939,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 175.26 121.92 0)
+			(at 176.53 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11725,7 +11948,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 175.26 121.92 0)
+			(at 176.53 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11739,7 +11962,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR035")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -11754,7 +11977,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d5dc7f0b-e4d5-4381-84ad-fb09dda618f5")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR034"
 			(at 246.38 62.23 0)
 			(effects
 				(font
@@ -11804,7 +12027,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR038")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -11890,7 +12113,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "de890098-450b-446f-85a8-e425590cd641")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR038"
 			(at 109.22 177.8 0)
 			(effects
 				(font
@@ -11940,7 +12163,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR019")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -11955,7 +12178,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "df3d2c2f-8cae-422a-9909-ead170a729ef")
-		(property "Reference" "TP8"
+		(property "Reference" "TP4"
 			(at 38.1 99.06 90)
 			(effects
 				(font
@@ -12023,7 +12246,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP8")
+					(reference "TP4")
 					(unit 1)
 				)
 			)
@@ -12206,7 +12429,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e363a0cf-a510-4a38-9acf-204a4c0cecb8")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR022"
 			(at 119.38 177.8 0)
 			(effects
 				(font
@@ -12256,7 +12479,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR024")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -12271,7 +12494,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e9af685c-166e-41f0-bcf2-685016e4b0ef")
-		(property "Reference" "TP1"
+		(property "Reference" "TP15"
 			(at 22.86 111.76 90)
 			(effects
 				(font
@@ -12339,141 +12562,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 156.21 90.17 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "f109a336-c584-4a25-8bc5-137ae4d8f38d")
-		(property "Reference" "C15"
-			(at 153.416 88.646 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "47µF"
-			(at 160.02 88.392 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 156.21 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 156.21 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 156.21 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "08d3d1de-fd3a-499f-8dc6-d78651b9a2eb")
-		)
-		(pin "2"
-			(uuid "bc036698-1611-4caa-aedd-de429f805567")
-		)
-		(instances
-			(project "scampi"
-				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 156.21 86.36 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "f14f14aa-bc46-4b62-ab90-386bdec0c412")
-		(property "Reference" "C14"
-			(at 153.416 84.836 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "47µF"
-			(at 159.766 84.836 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 156.21 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 156.21 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 156.21 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "fcb538df-4814-4c78-a56a-c8c4c28f347b")
-		)
-		(pin "2"
-			(uuid "2bc6736b-99e1-4cda-8728-32b11e8b0c8f")
-		)
-		(instances
-			(project "scampi"
-				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "C14")
+					(reference "TP15")
 					(unit 1)
 				)
 			)
@@ -12488,7 +12577,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f2d8beaa-fd64-4bc4-9b00-3cc55cea973b")
-		(property "Reference" "TP14"
+		(property "Reference" "TP10"
 			(at 167.64 60.96 90)
 			(effects
 				(font
@@ -12556,7 +12645,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "TP14")
+					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -12572,7 +12661,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f5255657-eeed-4041-b780-05fa887e6913")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR031"
 			(at 147.32 139.7 0)
 			(effects
 				(font
@@ -12622,7 +12711,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR033")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -12926,7 +13015,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fd908261-6ef1-4172-8e7d-0b660d060c06")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR01"
 			(at 44.45 149.86 0)
 			(effects
 				(font
@@ -12976,7 +13065,7 @@
 		(instances
 			(project "scampi"
 				(path "/cabc36b8-f44e-4129-b157-2e140b6b20b4"
-					(reference "#PWR02")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
