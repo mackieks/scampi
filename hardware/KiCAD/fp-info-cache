@@ -1,4 +1,4 @@
-24194196309730653
+24281446291502566
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -89551,19 +89551,40 @@ SamacSys_Parts
 16
 16
 SamacSys_Parts
-045138008100858
-045138008100858+-2
+685119136923
+685119136923
 Connector
 0
-14
-14
+23
+23
 SamacSys_Parts
-685119136923
-685119136923
-Connector
+6x6x8mm_tact_ra
+
+
 0
-23
-23
+4
+4
+SamacSys_Parts
+74LVC2G17GWQ100H
+74LVC2G17GW-Q100H
+Integrated Circuit
+0
+6
+6
+SamacSys_Parts
+0412CDMCCDS-R22MC
+Sumida 0412CDMCCDS-R22MC
+Inductor
+0
+2
+2
+SamacSys_Parts
+1042P
+1042P_1
+Undefined or Miscellaneous
+0
+5
+5
 SamacSys_Parts
 51296-5494
 51296-5494
@@ -89572,12 +89593,12 @@ Connector
 56
 56
 SamacSys_Parts
-78171-0002
-78171-0002
-Connector
+155124RG73200
+155124RG73200-3
+LED
 0
-4
-4
+3
+3
 SamacSys_Parts
 503398-1892
 503398-1892
@@ -89586,54 +89607,75 @@ Connector
 14
 14
 SamacSys_Parts
-5040500491
-504050-0491-1
+123287243
+1-2328724-3-2
+Connector
+0
+15
+15
+SamacSys_Parts
+541020164
+54102-0164-1
+Connector
+0
+16
+16
+SamacSys_Parts
+5051103091
+505110-3091-2
+Connector
+0
+32
+32
+SamacSys_Parts
+781710004
+78171-0004-2
 Connector
 0
 6
 6
 SamacSys_Parts
-5051101092
-5051101092
-Connector
-0
-12
-12
-SamacSys_Parts
-5051101992
-505110-1992
-Connector
-0
-21
-21
-SamacSys_Parts
-5052781933
-505278-1933-1
-Connector
-0
-21
-21
-SamacSys_Parts
-2053380002
-2053380002
+1054301302
+105430-1302-1_1
 Connector
 0
 4
 4
 SamacSys_Parts
 2082940020
-208294-0020-2
+2082940020-6
 Connector
 0
 4
 4
 SamacSys_Parts
-BGA6C40P2X3_80X136X55
-ISL9113EIAZ-T 6pin
-Integrated Circuit
+2121340004
+212134-0004-4
+Connector
 0
 6
 6
+SamacSys_Parts
+ABM12W300000MHZ6B1UT3
+ABM12W
+Crystal or Oscillator
+0
+4
+4
+SamacSys_Parts
+AMCA722R470GS1FT4
+2-Pin SMD
+Antenna
+0
+2
+2
+SamacSys_Parts
+BGA4C35P2X2_64X64X44
+YKE0004(0.445)
+Integrated Circuit
+0
+4
+4
 SamacSys_Parts
 BGA6C40P2X3_86X116X62
 WLCSP-6, 0.4 mm Pitch
@@ -89642,8 +89684,8 @@ Integrated Circuit
 6
 6
 SamacSys_Parts
-BGA8C40P2X4_100X180X55
-W2x4.8
+BGA8C40P2X4_86X176X50
+YBG0008_2023
 Integrated Circuit
 0
 8
@@ -89656,50 +89698,64 @@ Power Supply
 9
 9
 SamacSys_Parts
+BGA12C40P4X3_185X140X69
+W121A1+3
+Integrated Circuit
+0
+12
+12
+SamacSys_Parts
 BGA15C40P3X5_134X226X62
 YFF0015
-Power Supply
+Integrated Circuit
 0
 15
 15
 SamacSys_Parts
-BGA36C75P6X8_600X800X120
-AS6C1008-55BIN
+BGA15C40P5X3_207X151X69
+W151K2Z+1-1
 Integrated Circuit
 0
-36
-36
+15
+15
 SamacSys_Parts
-BGA48C80P6X8_600X800X120
-48-Ball Thin-Profile, Fine-pitch Ball Grid Array (TFBGA) 6mm x 8mm SST Package Code: B3K
+BGA54C80P9X9_800X800X120
+54 Ball FBGA Package 8 x 8 x 1.2mm
 Integrated Circuit
 0
-48
-48
+54
+54
 SamacSys_Parts
 BGA54C80P9X9_800X1300X120
-TF-BGA
+54-ball BGA, Lead-free
 Integrated Circuit
 0
 54
 54
+SamacSys_Parts
+BGA63C80P10X12_900X1100X100
+63-Ball VFBGA (9mm x 11mm)
+Integrated Circuit
+0
+63
+63
 SamacSys_Parts
 BGA90C80P9X15_800X1300X120
-90L 8x13mm TF-BGA
+90-Ball TF-BGA, Lead-free
 Integrated Circuit
 0
 90
 90
 SamacSys_Parts
-BGA132C50P14X14_800X800X135
-132-Ball csBGA
+BGA96C80P9X16_800X1400X120
+:P - SDRAM, 256M
 Integrated Circuit
 0
-132
-132
+96
+96
 SamacSys_Parts
 BGA256C80P16X16_1400X1400X170
-256-Ball caBGA
+256-Ball caBGA Package
 Integrated Circuit
 0
 256
@@ -89712,12 +89768,40 @@ Integrated Circuit
 672
 672
 SamacSys_Parts
+BM29B4DP2035V53
+BM29B-4DP/2-0.35V(53)-1
+Connector
+0
+8
+8
+SamacSys_Parts
+BM29B064DS2035V53
+BM29B0.6-4DS/2-0.35V(53)-4
+Connector
+0
+12
+12
+SamacSys_Parts
+BM254P2V53
+BM25-4P/2-V(53)-4
+Connector
+0
+10
+10
+SamacSys_Parts
 BQ25792RQMR
 RQM0029A
 Integrated Circuit
 0
 33
 33
+SamacSys_Parts
+BZT52C12TTP
+BZT52C12T-TP-2
+Zener Diode
+0
+2
+2
 SamacSys_Parts
 CONMHF4SMDGT
 CONMHF4-SMD-G-T-2
@@ -89726,21 +89810,63 @@ Connector
 4
 4
 SamacSys_Parts
-CRYSTAL_2.5X2
-
-
+C_0201_0603Metric
+Capacitor SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
+capacitor
+0
+4
+2
+SamacSys_Parts
+Crystal_SMD_2520-4Pin_2.5x2.0mm
+SMD Crystal SERIES SMD2520/4 http://www.newxtal.com/UploadFiles/Images/2012-11-12-09-29-09-776.pdf, 2.5x2.0mm^2 package
+SMD SMT crystal
 0
 4
 4
 SamacSys_Parts
-CSD15380F3
-CSD15380F3-2
-MOSFET (N-Channel)
+DIONC1006X55N
+0402
+TVS Diode (Bi-directional)
 0
-3
-3
+2
+2
 SamacSys_Parts
-ECS-HCMPI-0503Q-2R2M-T
+DX07S024WJ3R400
+DX07S024WJ3R400-1
+Connector
+0
+28
+28
+SamacSys_Parts
+FUSC4632X85N
+MF-MSMF200
+Fuse
+0
+2
+2
+SamacSys_Parts
+FUSC7451X80N
+0ZCF0200AF2C
+Fuse
+0
+2
+2
+SamacSys_Parts
+GCT_USB4080-03-A_REVA1
+
+
+0
+34
+29
+SamacSys_Parts
+GT-TC029B-H030-L1N
+
+
+0
+2
+2
+SamacSys_Parts
+IHLP1616BZERR22M01
 XFL5015-152MEC-2
 Inductor
 0
@@ -89754,6 +89880,13 @@ Integrated Circuit
 8
 8
 SamacSys_Parts
+INDC2520X100N
+AOTA-B2
+Inductor
+0
+2
+2
+SamacSys_Parts
 INDC3225X120N
 TFM322512A
 Inductor
@@ -89761,26 +89894,12 @@ Inductor
 2
 2
 SamacSys_Parts
-IS41LV16100D50TLI
-44/50 Lead 400Mil TSOP-2
+LSF0102GSX
+SOT1203
 Integrated Circuit
 0
-40
-40
-SamacSys_Parts
-Jack_3.5mm_PJ320D_Horizontal
-Headphones with microphone connector, 3.5mm, 4 pins (http://www.qingpu-electronics.com/en/products/WQP-PJ320D-72.html)
-3.5mm jack mic microphone phones headphones 4pins audio plug
-0
-4
-4
-SamacSys_Parts
-LED_0603_1608Metric
-LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
-LED
-0
-2
-2
+8
+8
 SamacSys_Parts
 LSF0204GU12X
 LSF0204GU12X-1
@@ -89789,22 +89908,8 @@ Integrated Circuit
 12
 12
 SamacSys_Parts
-MUAS70R
-MU-AS70R-2
-Switch
-0
-6
-6
-SamacSys_Parts
-MUBUE70R
-MU-BUE70R-3
-Switch
-0
-8
-8
-SamacSys_Parts
-MUN3CAD03SE
-MUN3CAD03-SE-1
+MYRBP500080W21RD
+MYRBP500080W21RD-3
 Power Supply
 0
 9
@@ -89817,54 +89922,54 @@ Integrated Circuit
 8
 8
 SamacSys_Parts
-NX3DV221GM115
-SOT1049-2
+NFM18PC106D0J3L
+NFM18PC106D0J3L-3
+Filter
+0
+4
+4
+SamacSys_Parts
+PMPB15XPAX
+DFN2020MD-6 (SOT1220)_2022
+MOSFET (P-Channel)
+0
+8
+8
+SamacSys_Parts
+QFN-64_EP_7.5x7.5_Pitch0.4mm
+
+
+0
+81
+65
+SamacSys_Parts
+QFN35P500X500X90-49N-D
+QFN48 (5x5 mm) height 0.9
 Integrated Circuit
 0
-10
-10
+49
+49
 SamacSys_Parts
-NX138AKHH
-NX138AKHH-2
-MOSFET (N-Channel)
-0
-3
-3
-SamacSys_Parts
-NX7002BKMYL
-NX7002BKMYL-3
-MOSFET (N-Channel)
-0
-3
-3
-SamacSys_Parts
-PMZ550UNEYL
-SOT883_1
-MOSFET (N-Channel)
-0
-3
-3
-SamacSys_Parts
-PTH08080WAD
-EUF (R-PDSS-T5)
-Power Supply
-0
-5
-5
-SamacSys_Parts
-PV36W201C01B00
-PV36W
-Variable Resistor
-0
-3
-3
-SamacSys_Parts
-QFN40P300X300X90-21N
-20 VQFN 3x3-1
+QFN40P400X400X80-33N-D
+RSN (S-PWQFN-N32)
 Integrated Circuit
 0
-21
-21
+33
+33
+SamacSys_Parts
+QFN40P750X750X80-65N-D
+LT6711A
+Integrated Circuit
+0
+65
+65
+SamacSys_Parts
+QFN50P300X300X90-17N
+Pb-Free(1) 16-Pin QFN Pb-Free(1) 16-Pin QFN
+Integrated Circuit
+0
+17
+17
 SamacSys_Parts
 QFN50P400X400X60-28N-D
 UFQFPN28 -1
@@ -89874,11 +89979,18 @@ Integrated Circuit
 28
 SamacSys_Parts
 QFN50P400X400X80-25N-D
-W-QFN4040-24
+RTW (S-PWQFN-N24)
 Integrated Circuit
 0
 25
 25
+SamacSys_Parts
+QFN50P500X500X90-33N-D
+ESP8285
+Integrated Circuit
+0
+33
+33
 SamacSys_Parts
 QFN50P500X500X100-33N
 QFN50P500X500X100-33N
@@ -89894,26 +90006,12 @@ Integrated Circuit
 41
 41
 SamacSys_Parts
-QFN56_7MM_REDUCEDEPAD
-
-
+QFN50P1000X1000X90-73N-D
+SIL9022A
+Integrated Circuit
 0
-57
-57
-SamacSys_Parts
-QFP-52_10x10_Pitch0.65mm
-
-
-0
-52
-52
-SamacSys_Parts
-QFP-208_28x28_Pitch0.5mm
-
-
-0
-208
-208
+73
+73
 SamacSys_Parts
 QFP50P1600X1600X120-100N
 100-Pin Plastic Thin Quad Flat Pack (TQFP)
@@ -89922,82 +90020,89 @@ Integrated Circuit
 100
 100
 SamacSys_Parts
-RV1C002UNT2CL
-DFN0806-3 (VML0806)
-MOSFET (N-Channel)
-0
-3
-3
-SamacSys_Parts
-SJ43514SMTTR
-SJ-43514-SMT-TR-7
+QSH03001LDAKTR
+QSH-030-01-L-D-A-K-TR-2
 Connector
 0
-6
-6
+64
+64
 SamacSys_Parts
-SM02BSURSTFLFSN
-SM03B-SURS-TF(LF)(SN)-2
+QTH-030-XX-Y-D-A-K
+QTH-030-XX-Y-D-A-K
+Connector
+0
+64
+64
+SamacSys_Parts
+R_0201_0603Metric
+Resistor SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
+resistor
+0
+4
+2
+SamacSys_Parts
+SIC431CEDT1GE3
+SIC431CED-T1-GE3-2
+Integrated Circuit
+0
+33
+33
+SamacSys_Parts
+SJ3524SMTTRPI
+SJ-3524-SMT-TR-PI-2
 Connector
 0
 4
 4
 SamacSys_Parts
-SM03BSURSTFLFSN
-SM03B-SURS-TF(LF)(SN)-2
-Connector
-0
-5
-5
-SamacSys_Parts
-SOIC-70
-
-
-0
-70
-70
-SamacSys_Parts
-SON50P100X250X50-10N
-SOT 1176-1
-Diode ESD (Uni-directional)
-0
-10
-10
-SamacSys_Parts
-SON50P200X200X100-9N
-L8.2x2D
+SOIC127P600X175-8N
+SN
 Integrated Circuit
 0
-9
-9
+8
+8
 SamacSys_Parts
-SON50P300X200X60-9N-D
-AT25SF041B-MAHD-T
-Integrated Circuit
-0
-9
-9
-SamacSys_Parts
-SON50P300X200X100-9N
-L8.2x3
-Integrated Circuit
-0
-9
-9
-SamacSys_Parts
-SON50P300X300X80-11N-D
-HUSB238
+SON40P250X200X80-11N
+10-LFCSP-2.5X2X0.75-1
 Integrated Circuit
 0
 11
 11
 SamacSys_Parts
-SOT-143R
-SOT-143R, reverse pinning, https://www.nxp.com/docs/en/package-information/SOT143R.pdf
-SOT-143R Reverse
+SON65P200X200X80-7N
+SOT8044-1
+Integrated Circuit
 0
-4
-4
+7
+7
+SamacSys_Parts
+SOP50P2000X120-48N
+48-pin TSOP I (18.4 × 12 × 1.2 mm)
+Integrated Circuit
+0
+48
+48
+SamacSys_Parts
+SOT65P210X110-5N
+dck(r-pdso-g5)_1
+Integrated Circuit
+0
+5
+5
+SamacSys_Parts
+SOT65P210X110-6N
+SC70-6
+Integrated Circuit
+0
+6
+6
+SamacSys_Parts
+SOT65P212X110-5N
+SOT353-1
+Integrated Circuit
+0
+5
+5
 SamacSys_Parts
 SOT95P275X110-6N
 THIN SOT23
@@ -90006,12 +90111,12 @@ Integrated Circuit
 6
 6
 SamacSys_Parts
-SOT95P285X140-6N
-SOT26-5
+SOT95P280X145-5N
+DBV (R-PDSO-G5)
 Integrated Circuit
 0
-6
-6
+5
+5
 SamacSys_Parts
 SOTFL50P160X60-6N
 DRL0006A
@@ -90020,15 +90125,22 @@ Integrated Circuit
 6
 6
 SamacSys_Parts
-SOTFL50P160X80-3N
-SC89-3-1
+SOTFL50P160X60-8N
+DRL_8
+Integrated Circuit
+0
+8
+8
+SamacSys_Parts
+SQS401ENT1_BE3
+SQS401EN-T1_BE3-3
 MOSFET (N-Channel)
 0
-3
-3
+11
+11
 SamacSys_Parts
-TPS3420DDRYR
-DRY0006A
+TPS62825DMQT
+TPS62825DMQT-1
 Integrated Circuit
 0
 6
@@ -90041,19 +90153,40 @@ Integrated Circuit
 9
 9
 SamacSys_Parts
-TestPoint_Pad_D0.75mm
+TestPoint_Oval
+SMD pad as test Point, diameter 1.5mm
+test point SMD pad
+0
+1
+1
+SamacSys_Parts
+TestPoint_Pad_D0.8mm
 SMD pad as test Point, diameter 1.0mm
 test point SMD pad
 0
 1
 1
 SamacSys_Parts
-VLBU6565100
-VLBU6565100
-Inductor
+Untitled
+
+
+0
+1
+1
+SamacSys_Parts
+Untitled_1
+
+
+0
+4
+2
+SamacSys_Parts
+Untitled_2
+
+
 0
 2
-2
+1
 SamacSys_Parts
 XFL5015152MEC
 XFL5015-152MEC-2
@@ -90062,26 +90195,68 @@ Inductor
 2
 2
 SamacSys_Parts
-button
-
-
+XRCGB
+XRCGB
+Crystal or Oscillator
 0
-0
-0
+4
+4
 SamacSys_Parts
-dc_button
+diffpair_cast
 
 
 0
-2
+4
 2
 SamacSys_Parts
 gcc
 
 
 0
-11
 9
+9
+SamacSys_Parts
+oval_tp
+SMD pad as test Point, diameter 1.5mm
+test point SMD pad
+0
+1
+1
+SamacSys_Parts
+pogo
+
+
+0
+12
+12
+SamacSys_Parts
+pogopad
+SMD rectangular pad as test Point, square 1.5mm side length
+test point SMD pad rectangle square
+0
+1
+1
+SamacSys_Parts
+pth_pad
+
+
+0
+1
+1
+SamacSys_Parts
+small_solder_jumper
+SMD Solder Jumper, 1x1.5mm, rounded Pads, 0.3mm gap, open
+solder jumper open
+0
+2
+2
+SamacSys_Parts
+solo_cast
+
+
+0
+2
+2
 Sensor
 ASAIR_AM2302_P2.54mm_Lead2.75mm_TabDown
 Temperature and humidity module, http://akizukidenshi.com/download/ds/aosong/AM2302.pdf
@@ -98006,52 +98181,234 @@ Varistor VF
 0
 2
 2
+cr1616
+5ghzconn
+
+
+0
+24
+24
+cr1616
+cr1616
+
+
+0
+2
+2
+easyeda2kicad
+FILTER-SMD_6P-L1.6-W0.8-P0.50-BL
+
+
+0
+6
+6
+easyeda2kicad
+UBGA-672_L23.0-W23.0-P0.80-TL_ALTERA_MO-308
+
+
+0
+672
+672
+footprints
+POWERWCSP8_DSBGA8_YWF_TEX
+
+INA700AYWFR 
+0
+8
+8
 footprints2
-QFN-22_MP2721_MNP
+CON_2053380002
 
-MP2721GRH-0000-P 
-0
-22
-22
-i2c_oled
-SSD1306-0.91-OLED-4pin-128x32
-
-
+2053380002 
 0
 4
 4
-pj320
-TRRS-PJ-320D
+resistor_array
+EXBD_PAN
+
+EXB-D10C103J 
+0
+10
+10
+resistor_array
+EXBD_PAN-L
+
+EXB-D10C103J 
+0
+10
+10
+resistor_array
+EXBD_PAN-M
+
+EXB-D10C103J 
+0
+10
+10
+tpsm
+RDX0007A-MFG
+
+TPSM861252RDXR 
+0
+19
+19
+trrs_pth
+54-00176_TEN
+
+54-00176 
+0
+6
+6
+usb-c
+1206_reverse_mount_LED
+Everlight 26-21/BHC-ATW/CA, LCSC Part # C264553
+
+0
+2
+2
+usb-c
+APA102-2020
 
 
 0
-4
-4
-rp2040_stamp
-RP2040_Stamp_FlexyPin
+8
+6
+usb-c
+TYPE-C-31-M-04
+USB TYPE C, RA RCPT PCB, Hybrid, https://www.amphenolcanada.com/StockAvailabilityPrice.aspx?From=&PartNum=12401548E4%7e2A
+USB C Type-C Receptacle Hybrid
+0
+28
+28
+usb-c
+TYPE-C-31-M-12
+Korean Hroparts Elec, Power only USB connector supporting up to 3A
+
+0
+20
+17
+usb-c
+TYPE-C-31-M-14
+Korean Hroparts Elec, Power only USB connector supporting up to 3A
+
+0
+20
+17
+usb-c
+TYPE-C-31-M-17
+Korean Hroparts Elec, Power only USB connector supporting up to 3A
+
+0
+10
+7
+usb-c
+TYPE-C-31-M-17_handsolder
+Korean Hroparts Elec, Power only USB connector supporting up to 3A, easier to solder w/0.3mm pad separation
+
+0
+10
+7
+usb-c
+U-A-39DS-Y-1
 
 
 0
-160
-40
-rp2040_stamp
-RP2040_Stamp_SMD
-
-
+11
+10
+usb-c
+U-B-M9DD-W-1
+ Korean Hroparts Elec, USB 3.0 Type B
+USB3
 0
-40
-40
-rp2040_stamp
-RP2040_Stamp_THT
-
-
+9
+9
+usb-c
+U-F-10SW-Y-1
+Korean Hroparts Elec, USB 3.0 Female Micro-B, 1.5A 2 Surface Mount 5+5
+USB3
 0
-80
-40
-usb4030
-GCT_USB4080-03-A_REVA1
-
-
+16
+11
+wch_parts
+ANT-F-1-2.4G-0.2MM-FPC-WCH
+2.4Ghz FPC Antenna. Design provided by WCH.  Website: wch-ic.com 
+Antenna, WCH, 
 0
-34
-29
+2
+2
+wch_parts
+ANT-F-1-2.4G-0.4MM-FR4-WCH
+2.4GHz PCB antenna for 0.4mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH,
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-0.6MM-FR4-WCH
+2.4GHz PCB antenna for 0.6mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-0.8MM-FR4-WCH
+2.4GHz PCB antenna for 0.8mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-1.0MM-FR4-WCH
+2.4GHz PCB antenna for 1 mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-1.2MM-FR4-WCH
+2.4GHz PCB antenna for 1.2mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-1.6MM-FR4-WCH
+2.4GHz PCB antenna for 1.6mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-2.0MM-FR4-WCH
+2.4GHz PCB antenna for 2 mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-1-2.4G-2.4MM-FR4-WCH
+2.4GHz PCB antenna for 2.4mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-2-2.4G-0.8MM-FR4-WCH
+2.4GHz PCB antenna for 0.8mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-2-2.4G-1.2MM-FR4-WCH
+2.4GHz PCB antenna for 1.2mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2
+wch_parts
+ANT-F-3-2.4G-1.6MM-FR4-WCH
+2.4GHz PCB antenna for 1.6mm FR4 boards. Design provided by WCH. Website: wch-ic.com
+Antenna, WCH
+0
+2
+2

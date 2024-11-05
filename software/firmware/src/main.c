@@ -11,7 +11,8 @@
 #include "i2c/tlv320aic3110.h"
 
 // GPIO pin definitions
-static const gpio_t RESET = {&PORTB, 2};
+static const gpio_t RESET = {&PORTB, 2}; // PB2
+// static const gpio_t HPS   = {&PORTA, 7}; // PA7
 
 // Initialize the GPIO pins
 static void gpio_init()
@@ -19,17 +20,25 @@ static void gpio_init()
   // Codec reset, active low
   gpio_output(RESET);
   gpio_set_low(RESET);
+
+  PORTA.PIN7CTRL |= PORT_PULLUPEN_bm; // enable pullup on PA7
+
+  // ADC on PA7
+  ADC0.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
+  ADC0.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
+  ADC0.MUXPOS  = ADC_MUXPOS_AIN7_gc; // select PA7
+  ADC0.COMMAND = 0b1; // start conversion
 }
 
 static void codec_write(int reg, int value)
 {
-  i2c_reg_write_byte(TLV320AIC3110_ADDR, reg, value);
+  i2c_reg_write_byte(TLV320_ADDR, reg, value);
 }
 
 volatile int codec_read(int reg)
 {
   int data;
-  i2c_reg_read_byte(TLV320AIC3110_ADDR, reg, &data);
+  i2c_reg_read_byte(TLV320_ADDR, reg, &data);
   return (data);
 }
 
@@ -92,7 +101,7 @@ int main(void)
   // codec_write(0x0C, 0x84); // MDAC is powered and set to 2
 
   // uint8_t osr_buf[3] = {0x0D, 0x00, 0x80}; // 128
-  // i2c_write(TLV320AIC3110_ADDR, osr_buf, 3);
+  // i2c_write(TLV320_ADDR, osr_buf, 3);
 
   codec_write(0x74, 0x0); //  DAC -> volume control pin disable
   codec_write(0x44, 0x0); // DAC -> DRC disable
@@ -128,20 +137,33 @@ int main(void)
 
   // Main loop
   while (1) {
-    codec_write(0x00, 0x00); // select page 0
-    if (codec_read(0x2C) & (1 << 4)) { // if bit 5 is set (headset insertion detected)
-      codec_write(0x0, 0x01); // Select page 1
-      codec_write(0x2A, 0x00); // mute class D left
-      codec_write(0x2B, 0x00); // mute class D right
-      codec_write(0x20, 0x06); // power down class D drivers
-      codec_write(0x1F, 0xC4);
-    } else {
+    // codec_write(0x00, 0x00); // select page 0
+    // if (codec_read(0x2C) & (1 << 4)) { // if bit 5 is set (headset insertion detected)
+    //   codec_write(0x0, 0x01); // Select page 1
+    //   codec_write(0x2A, 0x00); // mute class D left
+    //   codec_write(0x2B, 0x00); // mute class D right
+    //   codec_write(0x20, 0x06); // power down class D drivers
+    //   codec_write(0x1F, 0xC4);
+    // } else {
+    //   codec_write(0x0, 0x01); // Select page 1
+    //   codec_write(0x2A, 0x1C); // unmute class D left
+    //   codec_write(0x2B, 0x1C); // unmute class D right
+    //   codec_write(0x20, 0xC6); // power up class D drivers
+    //   // codec_write(0x1F, 0xC4);
+    // }
+
+    _delay_ms(100);
+
+    if (ADC0.RESL > 0xF0) { // if PA7 is floating (high due to pull-up), turn on speakers
       codec_write(0x0, 0x01); // Select page 1
       codec_write(0x2A, 0x1C); // unmute class D left
       codec_write(0x2B, 0x1C); // unmute class D right
       codec_write(0x20, 0xC6); // power up class D drivers
-      // codec_write(0x1F, 0xC4);
+    } else { // if PA7 is low, mute speakers
+      codec_write(0x0, 0x01); // Select page 1
+      codec_write(0x2A, 0x00); // mute class D left
+      codec_write(0x2B, 0x00); // mute class D right
+      codec_write(0x20, 0x06); // power down class D drivers
     }
-    //_delay_ms(100);
   }
 }
