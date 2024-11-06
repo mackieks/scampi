@@ -21,13 +21,13 @@ static void gpio_init()
   gpio_output(RESET);
   gpio_set_low(RESET);
 
-  PORTA.PIN7CTRL |= PORT_PULLUPEN_bm; // enable pullup on PA7
+  // PORTA.PIN7CTRL |= PORT_PULLUPEN_bm; // enable pullup on PA7
 
   // ADC on PA7
-  ADC0.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
-  ADC0.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
-  ADC0.MUXPOS  = ADC_MUXPOS_AIN7_gc; // select PA7
-  ADC0.COMMAND = 0b1; // start conversion
+  ADC0.CTRLA  = 0x07; // enable ADC in free-running 8-bit mode
+  ADC0.CTRLC  = 0x01010000; // reduced capacitance mode, set VREF to VDD
+  ADC0.MUXPOS = ADC_MUXPOS_AIN6_gc; // select PA6
+  // ADC0.COMMAND = 0b1; // start conversion
 }
 
 static void codec_write(int reg, int value)
@@ -137,33 +137,49 @@ int main(void)
 
   // Main loop
   while (1) {
-    // codec_write(0x00, 0x00); // select page 0
-    // if (codec_read(0x2C) & (1 << 4)) { // if bit 5 is set (headset insertion detected)
-    //   codec_write(0x0, 0x01); // Select page 1
-    //   codec_write(0x2A, 0x00); // mute class D left
-    //   codec_write(0x2B, 0x00); // mute class D right
-    //   codec_write(0x20, 0x06); // power down class D drivers
-    //   codec_write(0x1F, 0xC4);
-    // } else {
-    //   codec_write(0x0, 0x01); // Select page 1
-    //   codec_write(0x2A, 0x1C); // unmute class D left
-    //   codec_write(0x2B, 0x1C); // unmute class D right
-    //   codec_write(0x20, 0xC6); // power up class D drivers
-    //   // codec_write(0x1F, 0xC4);
-    // }
 
-    _delay_ms(100);
+    int a6 = 0;
+    int a7 = 0;
 
-    if (ADC0.RESL > 0xF0) { // if PA7 is floating (high due to pull-up), turn on speakers
+    // measure PA6
+    ADC0.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PA6
+    ADC0.COMMAND = 0b1; // start conversion
+    while (ADC0.COMMAND & ADC_STCONV_bm) { _delay_ms(1); }
+    a6 = ADC0.RESL;
+
+    // measure PA7
+    ADC0.MUXPOS  = ADC_MUXPOS_AIN7_gc; // select PA6
+    ADC0.COMMAND = 0b1; // start conversion
+    while (ADC0.COMMAND & ADC_STCONV_bm) { _delay_ms(1); }
+    a7 = ADC0.RESL;
+
+    // if PA6 == PA7, then headphones are NOT present, so turn them off and enable speakers
+    if (a6 > (a7 - 0x0f) && a6 < (a7 + 0x0f)) {
       codec_write(0x0, 0x01); // Select page 1
+      codec_write(0x1F, 0x04); // power down headphone drivers
       codec_write(0x2A, 0x1C); // unmute class D left
       codec_write(0x2B, 0x1C); // unmute class D right
       codec_write(0x20, 0xC6); // power up class D drivers
-    } else { // if PA7 is low, mute speakers
+    } else { // PA6 and PA7 are different because tip switch is isolated and pulled high; enable headphones
       codec_write(0x0, 0x01); // Select page 1
       codec_write(0x2A, 0x00); // mute class D left
       codec_write(0x2B, 0x00); // mute class D right
       codec_write(0x20, 0x06); // power down class D drivers
+      codec_write(0x1F, 0xC4); // power up headphone drivers
     }
+
+    _delay_ms(100);
+
+    // if (ADC0.RESL > 0xF0) { // if PA7 is floating (high due to pull-up), turn on speakers
+    //   codec_write(0x0, 0x01); // Select page 1
+    //   codec_write(0x2A, 0x1C); // unmute class D left
+    //   codec_write(0x2B, 0x1C); // unmute class D right
+    //   codec_write(0x20, 0xC6); // power up class D drivers
+    // } else { // if PA7 is low, mute speakers
+    //   codec_write(0x0, 0x01); // Select page 1
+    //   codec_write(0x2A, 0x00); // mute class D left
+    //   codec_write(0x2B, 0x00); // mute class D right
+    //   codec_write(0x20, 0x06); // power down class D drivers
+    // }
   }
 }
