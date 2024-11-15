@@ -1,4 +1,4 @@
-24197658099043490
+24201120689626407
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -89929,6 +89929,13 @@ MOSFET (N-Channel)
 3
 3
 SamacSys_Parts
+RV100F304K1B50K
+RV100F-30-4K1-B50K-2
+Variable Resistor
+0
+5
+5
+SamacSys_Parts
 SJ43514SMTTR
 SJ-43514-SMT-TR-7
 Connector
@@ -90096,6 +90103,13 @@ pth_pad
 0
 1
 1
+SamacSys_Parts
+small_solder_jumper
+SMD Solder Jumper, 1x1.5mm, rounded Pads, 0.3mm gap, open
+solder jumper open
+0
+2
+2
 Sensor
 ASAIR_AM2302_P2.54mm_Lead2.75mm_TabDown
 Temperature and humidity module, http://akizukidenshi.com/download/ds/aosong/AM2302.pdf
