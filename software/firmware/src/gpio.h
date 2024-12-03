@@ -36,6 +36,16 @@ static inline void gpio_input(gpio_t gpio)
 }
 
 /**
+ * Enable a pin's internal pull-up
+ *
+ * @param gpio The pin to pull up
+ */
+static inline void gpio_pullup(gpio_t gpio)
+{
+  (&gpio.port->PIN0CTRL)[gpio.num] |= PORT_PULLUPEN_bm;
+}
+
+/**
  * Configure the control settings for a pin
  *
  * @param gpio The pin to configure
