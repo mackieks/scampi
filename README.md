@@ -2,7 +2,7 @@
 
 Scampi is a truly universal OSHW audio amp for portablizers. UNTESTED!
 
-<img src="images/scampi.png" width="800"> 
+<img src="images/scampi_new.png" width="800"> 
 
 Features:
 
