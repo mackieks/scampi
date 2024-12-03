@@ -13,7 +13,7 @@ Features:
 - Solder jumpers for mode selection (15 modes planned)
 - Shrimp-themed!🦐
   
-<img src="images/layout.jpg" width="400">
+<img src="images/layout.png" width="400">
 
 Hardware TESTED AND WORKING! Firmware in progress. Planned modes:
 
