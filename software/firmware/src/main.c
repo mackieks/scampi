@@ -58,6 +58,7 @@ static void gpio_init()
 
   // internal pullups for IO pins
   gpio_pullup(VOL_UP);
+  gpio_pullup(VOL_DN);
   gpio_pullup(A_MODE);
   gpio_pullup(MODE0);
   gpio_pullup(MODE1);
@@ -73,9 +74,6 @@ static void gpio_init()
     ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
     ADC1.MUXPOS  = ADC_MUXPOS_AIN7_gc; // select PC1
     ADC1.COMMAND = 0b1; // start conversion
-
-  } else {
-    gpio_pullup(VOL_DN);
   }
 }
 
