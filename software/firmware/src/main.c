@@ -1,3 +1,15 @@
+/*
+  Scampi firmware
+
+  Application code for ATtiny1616 and TLV320AIC3110
+
+  https://www.ti.com/lit/ds/symlink/tlv320aic3110.pdf
+
+  Mackie Kannard-Smith, James Smith 2024
+  MIT License
+
+*/
+
 #include <stdint.h>
 #include <string.h>
 
@@ -12,10 +24,19 @@
 
 // speaker type (controls gain)
 #define IPHONE_15PM_SPKR 1
-#define CMS_151135_078X 0
+#define CMS_151135_078X 1
 #define FOUR_OHM_20MM_2W 0
 
-static volatile bool analog_vol_ctrl = 0;
+static volatile bool analog_vol_ctrl   = 0;
+static volatile bool headset_connected = 0;
+static volatile bool mute              = 0;
+
+// higher value = reduced gain (see Table 7-38 in datasheet)
+static const uint8_t min_vol = 118;
+static const uint8_t max_vol = 0;
+
+static volatile uint8_t spk_vol = 10;
+static volatile uint8_t hp_vol  = 10;
 
 // GPIO pin definitions
 static const gpio_t RESET  = {&PORTB, 2}; // PB2
@@ -82,12 +103,52 @@ volatile int codec_read(int reg)
   return (data);
 }
 
-static void codec_init()
+static void codec_reset()
 {
   // Reset codec
   gpio_set_low(RESET);
   _delay_ms(10);
   gpio_set_high(RESET);
+}
+
+static void mute_spk()
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x2A, 0x00); // SPL driver mute
+  codec_write(0x2B, 0x00); // SPR driver mute
+}
+
+static void mute_hp()
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x28, 0x02); // HPL driver mute
+  codec_write(0x29, 0x02); // HPR driver mute
+}
+
+static void unmute_spk()
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x2A, 0x04); // SPL driver unmute
+  codec_write(0x2B, 0x04); // SPR driver unmute
+}
+
+static void unmute_hp()
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x28, 0x06); // HPL driver unmute
+  codec_write(0x29, 0x06); // HPR driver unmute
+}
+
+static void toggle_mute()
+{
+  mute != mute;
+  if (mute) {
+    mute_spk();
+    mute_hp();
+  } else {
+    unmute_spk();
+    unmute_hp();
+  }
 }
 
 int main(void)
@@ -105,7 +166,7 @@ int main(void)
   // Initialize as an I2C controller
   i2c_configure(I2C_MODE_STANDARD);
 
-  codec_init(); // reset codec
+  codec_reset();
 
   // Initialize TLV320AIC3110
   codec_write(0x0, 0x0); //  select page 0
@@ -214,23 +275,18 @@ int main(void)
   codec_write(0x21, 0x4E); // De-pop, power on = 800 ms, step time = 4ms
   codec_write(0x23, 0x44); // LDAC routed to left mixer, RDAC routed to right mixer
 
-  codec_write(0x24, 0x88); // enables HPL output analog volume, set = 0 dB
-  codec_write(0x25, 0x88); // enables HPR output analog volume, set = 0 dB
-  codec_write(0x26, 0x88); // enables SPL output analog volume, set = 0 dB
-  codec_write(0x27, 0x88); // enables SPR output analog volume, set = 0 dB
+  codec_write(0x24, 0x88); // HPL output analog volume, set = 0 dB
+  codec_write(0x25, 0x88); // HPR output analog volume, set = 0 dB
+  codec_write(0x26, 0x80); // SPL output analog volume, set = 0 dB
+  codec_write(0x27, 0x80); // SPR output analog volume, set = 0 dB
 
-  codec_write(0x28, 0x06); // HPL driver gain/mute
-  codec_write(0x29, 0x06); // HPR driver gain/mute
-  codec_write(0x2A, 0x00); // SPL driver gain/mute
-  codec_write(0x2B, 0x00); // SPR driver gain/mute
+  // muting controlled right at driver
+  codec_write(0x28, 0x04); // HPL driver mute
+  codec_write(0x29, 0x04); // HPR driver mute
+  codec_write(0x2A, 0x00); // SPL driver mute
+  codec_write(0x2B, 0x00); // SPR driver mute
 
   codec_write(0x2E, 0x0B); // Micbias set to AVDD (for HPS pull-up)
-
-  // no idea if necessary
-  // codec_write(0x0, 0x0); // select page 0
-  // codec_write(0x3C, 0x0B); // select DAC DSP Processing Block PRB_P1
-  // codec_write(0x00, 0x08); // select page 8
-  // codec_write(0x01, 0x04); // enable adaptive filtering?
 
   codec_write(0x00, 0x00); // select page 0
   codec_write(0x3F, 0xD6); // power up DAC left and right channels (soft step disable)
@@ -241,21 +297,72 @@ int main(void)
   // Main loop
   while (1) {
 
-    if (analog_vol_ctrl) {
-      // read analog volume wheel value
-    } else { // digital volume control
-      if (!gpio_read(VOL_DN)) {
+    // Q: why is everything done with polling?
+    // A: I couldn't route GPIO1 or DOUT to the MCU as a headphone detect interrupt, so I am forced to poll the amp
+    // over i2c to detect headphones. Since the MCU is already polling 24/7, it doesn't hurt to poll for volume too
+
+    // headphone detect
+    codec_write(0x00, 0x00); // select page 0
+    if (codec_read(0x43) & 1 << 5) { // if headset is connected...
+      if (headset_connected == false) { // ...and wasn't already connected
         codec_write(0x0, 0x01); // Select page 1
-        codec_write(0x2A, 0x00); // mute class D left
-        codec_write(0x2B, 0x00); // mute class D right
+        mute_spk();
         codec_write(0x20, 0x06); // power down class D drivers
         codec_write(0x1F, 0xC4); // power up headphone drivers
-      } else if (!gpio_read(VOL_UP)) {
+        unmute_hp();
+        headset_connected = true;
+      }
+    } else { // if headset is not connected...
+      if (headset_connected == true) { // ...and was previously connected
         codec_write(0x0, 0x01); // Select page 1
+        mute_hp();
         codec_write(0x1F, 0x04); // power down headphone drivers
-        codec_write(0x2A, 0x1C); // unmute class D left
-        codec_write(0x2B, 0x1C); // unmute class D right
         codec_write(0x20, 0xC6); // power up class D drivers
+        unmute_spk();
+        headset_connected = false;
+      }
+    }
+
+    if (analog_vol_ctrl) {
+      // read analog volume wheel
+    } else { // digital volume control
+      if (!gpio_read(VOL_DN)) {
+        if (!gpio_read(VOL_UP)) // both vol buttons pressed. MUTE/UNMUTE
+          toggle_mute();
+        else { // decrease volume
+          if (headset_connected) {
+            if (hp_vol < min_vol) {
+              hp_vol += 2;
+              codec_write(0x24, hp_vol); // HPL analog volume
+              codec_write(0x25, hp_vol); // HPR analog volume
+            }
+          } else {
+            if (spk_vol < min_vol) {
+              spk_vol += 2;
+              codec_write(0x26, spk_vol); // SPL analog volume
+              codec_write(0x27, spk_vol); // SPR analog volume
+            }
+          }
+        }
+
+      } else if (!gpio_read(VOL_UP)) {
+        if (!gpio_read(VOL_DN)) // both vol buttons pressed. MUTE/UNMUTE
+          toggle_mute();
+        else { // increase volume
+          if (headset_connected) {
+            if (hp_vol > max_vol) {
+              hp_vol -= 2;
+              codec_write(0x24, hp_vol); // HPL analog volume
+              codec_write(0x25, hp_vol); // HPR analog volume
+            }
+          } else {
+            if (spk_vol > max_vol) {
+              spk_vol -= 2;
+              codec_write(0x26, spk_vol); // SPL analog volume
+              codec_write(0x27, spk_vol); // SPR analog volume
+            }
+          }
+        }
       }
     }
 
