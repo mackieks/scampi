@@ -24,7 +24,7 @@
 
 // speaker type (controls gain)
 #define IPHONE_15PM_SPKR 1
-#define CMS_151135_078X 1
+#define CMS_151135_078X 0
 #define FOUR_OHM_20MM_2W 0
 
 static volatile bool analog_vol_ctrl   = 0;
@@ -176,6 +176,7 @@ int main(void)
   switch (mode) {
     case 0b0000:
       // analog mode
+      codec_write(0x3F, 0b00000010); // power down DACs and disable data paths
       break;
 
     case 0b0001:
@@ -207,14 +208,21 @@ int main(void)
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
-      codec_write(0x1B, 0b10110000); // right-justified, word length 32
-      codec_write(0x1D, 0b00001000); //
+      codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
       codec_write(0x0B, 0x84); // NDAC is powered and set to 1
       codec_write(0x0C, 0x84); // MDAC is powered and set to 2
       break;
 
     case 0b0101:
       // Wii U mode
+      // same format as Wii but without MCLK?
+      codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
+      codec_write(0x05, 0b10010100); // PLL powered up. P = 1, R = 4
+      codec_write(0x06, 0b00000111); // J = 7
+
+      codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
+      codec_write(0x0B, 0b10000010); // NDAC powered up. NDAC = 2
+      codec_write(0x0C, 0b10000111); // MDAC powered up. MDAC = 7
       break;
 
     case 0b0110:
@@ -223,6 +231,12 @@ int main(void)
 
     case 0b0111:
       // Dreamcast mode
+      codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
+      codec_write(0x05, 0x00); // PLL powered off.
+
+      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x0B, 0x84); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x84); // MDAC is powered and set to 2
       break;
 
     case 0b1000:
@@ -262,16 +276,26 @@ int main(void)
       break;
   }
 
-  codec_write(0x74, 0x00); //  DAC -> volume control pin disable
-  codec_write(0x44, 0x00); // DAC -> DRC disable
+  // finish up amp init
 
-  // digital gain
-  codec_write(0x41, 0xf0); // DAC -> +24dB gain left
-  codec_write(0x42, 0xf0); // DAC -> +24dB gain right
+  if (mode == 0) { // analog mode
+    codec_write(0x23, 0b00100010); // analog inputs routed to mixers
+  } else { // digital modes
+    codec_write(0x74, 0x00); // DAC -> volume control pin disable
+    codec_write(0x44, 0x00); // DAC -> DRC disable
+
+    // digital gain
+    codec_write(0x41, 0xf0); // DAC -> +24dB gain left
+    codec_write(0x42, 0xf0); // DAC -> +24dB gain right
+
+    codec_write(0x23, 0b01000100); // DAC outputs routed to mixers
+
+    codec_write(0x3F, 0xD6); // power up DACs and enable data paths
+    codec_write(0x40, 0x00); // unmute DAC left and right channels
+  }
 
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x21, 0x4E); // De-pop, power on = 800 ms, step time = 4ms
-  codec_write(0x23, 0x44); // LDAC routed to left mixer, RDAC routed to right mixer
 
   codec_write(0x24, 0x88); // HPL output analog volume, set = 0 dB
   codec_write(0x25, 0x88); // HPR output analog volume, set = 0 dB
@@ -287,17 +311,11 @@ int main(void)
   codec_write(0x2E, 0x0B); // Micbias set to AVDD (for HPS pull-up)
 
   codec_write(0x00, 0x00); // select page 0
-  codec_write(0x3F, 0xD6); // power up DAC left and right channels (soft step disable)
-  codec_write(0x40, 0x00); // unmute DAC left and right channels
 
   codec_write(0x43, 0x93); // headset detection enabled
 
   // Main loop
   while (1) {
-
-    // Q: why is everything done with polling?
-    // A: I couldn't route GPIO1 or DOUT to the MCU as a headphone detect interrupt, so I am forced to poll the amp
-    // over i2c to detect headphones. Since the MCU is already polling 24/7, it doesn't hurt to poll for volume too
 
     // headphone detect
     codec_write(0x00, 0x00); // select page 0
@@ -325,39 +343,47 @@ int main(void)
       // read analog volume wheel
     } else { // digital volume control
       if (!gpio_read(VOL_DN)) {
-        if (!gpio_read(VOL_UP)) // both vol buttons pressed. MUTE/UNMUTE
+        if (!gpio_read(VOL_UP)) { // both vol buttons pressed. MUTE/UNMUTE
           toggle_mute();
-        else { // decrease volume
-          if (headset_connected) {
-            if (hp_vol < min_vol) {
-              hp_vol += 2;
-              codec_write(0x24, hp_vol); // HPL analog volume
-              codec_write(0x25, hp_vol); // HPR analog volume
-            }
-          } else {
-            if (spk_vol < min_vol) {
-              spk_vol += 2;
-              codec_write(0x26, spk_vol); // SPL analog volume
-              codec_write(0x27, spk_vol); // SPR analog volume
+          _delay_ms(50);
+          while (!gpio_read(VOL_DN) && !gpio_read(VOL_UP)); // wait for buttons to be released
+        } else { // decrease volume
+          if (!mute) {
+            if (headset_connected) {
+              if (hp_vol < min_vol) {
+                hp_vol += 2;
+                codec_write(0x24, hp_vol); // HPL analog volume
+                codec_write(0x25, hp_vol); // HPR analog volume
+              }
+            } else {
+              if (spk_vol < min_vol) {
+                spk_vol += 2;
+                codec_write(0x26, spk_vol); // SPL analog volume
+                codec_write(0x27, spk_vol); // SPR analog volume
+              }
             }
           }
         }
 
       } else if (!gpio_read(VOL_UP)) {
-        if (!gpio_read(VOL_DN)) // both vol buttons pressed. MUTE/UNMUTE
+        if (!gpio_read(VOL_DN)) { // both vol buttons pressed. MUTE/UNMUTE
           toggle_mute();
-        else { // increase volume
-          if (headset_connected) {
-            if (hp_vol > max_vol) {
-              hp_vol -= 2;
-              codec_write(0x24, hp_vol); // HPL analog volume
-              codec_write(0x25, hp_vol); // HPR analog volume
-            }
-          } else {
-            if (spk_vol > max_vol) {
-              spk_vol -= 2;
-              codec_write(0x26, spk_vol); // SPL analog volume
-              codec_write(0x27, spk_vol); // SPR analog volume
+          _delay_ms(50);
+          while (!gpio_read(VOL_DN) && !gpio_read(VOL_UP)); // wait for buttons to be released
+        } else { // increase volume
+          if (!mute) {
+            if (headset_connected) {
+              if (hp_vol > max_vol) {
+                hp_vol -= 2;
+                codec_write(0x24, hp_vol); // HPL analog volume
+                codec_write(0x25, hp_vol); // HPR analog volume
+              }
+            } else {
+              if (spk_vol > max_vol) {
+                spk_vol -= 2;
+                codec_write(0x26, spk_vol); // SPL analog volume
+                codec_write(0x27, spk_vol); // SPR analog volume
+              }
             }
           }
         }
