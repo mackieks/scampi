@@ -23,20 +23,29 @@
 #include "i2c/tlv320aic3110.h"
 
 // speaker type (controls gain)
-#define IPHONE_15PM_SPKR 1
-#define CMS_151135_078X 0
-#define FOUR_OHM_20MM_2W 0
+#define IPHONE_15PM 1
+#define CMS_151135 0
+#define FOUR_OHM_20MM 0
 
 static volatile bool analog_vol_ctrl   = 0;
 static volatile bool headset_connected = 0;
 static volatile bool mute              = 0;
+static volatile bool vol_down_pressed  = 0;
+static volatile bool vol_up_pressed    = 0;
 
 // higher value = reduced gain (see Table 7-38 in datasheet)
 static const uint8_t min_vol = 118;
 static const uint8_t max_vol = 0;
 
+#ifdef IPHONE_15PM
 static const uint8_t spk_gain = 0x30; // +24dB
-static const uint8_t hp_gain  = 0x00; // 0dB
+#elif CMS_151135
+static const uint8_t spk_gain = 0x20; // +16dB
+#elif FOUR_OHM_20MM
+static const uint8_t spk_gain = 0x28; // +20dB
+#endif
+
+static const uint8_t hp_gain = 0x00; // 0dB (suitable for my 15Ω headphones)
 
 static volatile uint8_t spk_vol = 16;
 static volatile uint8_t hp_vol  = 10;
@@ -59,25 +68,34 @@ static void gpio_init()
   gpio_output(RESET);
   gpio_set_low(RESET);
 
+  gpio_input(VOL_UP);
+  gpio_input(VOL_DN);
+  gpio_input(A_MODE);
+  gpio_input(MODE0);
+  gpio_input(MODE1);
+  gpio_input(MODE2);
+  gpio_input(MODE3);
+
+  if (!gpio_read(A_MODE)) { // enable analog volume control mode
+
+    analog_vol_ctrl = true;
+
+    // ADC on VOL_DN (PC0)
+    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
+    ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
+    ADC1.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PC0
+    ADC1.COMMAND = 0b1; // start conversion
+  } else {
+    gpio_pullup(VOL_DN);
+  }
+
   // internal pullups for IO pins
   gpio_pullup(VOL_UP);
-  gpio_pullup(VOL_DN);
   gpio_pullup(A_MODE);
   gpio_pullup(MODE0);
   gpio_pullup(MODE1);
   gpio_pullup(MODE2);
   gpio_pullup(MODE3);
-
-  if (gpio_read(A_MODE)) { // enable analog volume control mode
-
-    analog_vol_ctrl = true;
-
-    // ADC on VOL_DN (PC1)
-    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
-    ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
-    ADC1.MUXPOS  = ADC_MUXPOS_AIN7_gc; // select PC1
-    ADC1.COMMAND = 0b1; // start conversion
-  }
 }
 
 static uint8_t mode_detect()
@@ -118,6 +136,20 @@ static void set_dac_gain(uint8_t gain)
   codec_write(0x00, 0x00); // select page 0
   codec_write(0x41, gain); // DAC -> +24dB gain left
   codec_write(0x42, gain); // DAC -> +24dB gain right
+}
+
+static void set_spk_vol(uint8_t vol)
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x26, spk_vol); // SPL analog volume
+  codec_write(0x27, spk_vol); // SPR analog volume
+}
+
+static void set_hp_vol(uint8_t vol)
+{
+  codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x24, hp_vol); // HPL analog volume
+  codec_write(0x25, hp_vol); // HPR analog volumee
 }
 
 static void mute_spk()
@@ -168,6 +200,7 @@ static void toggle_mute()
   }
 }
 
+/* checks for headphones and handles muting/unmuting */
 static void check_headphones()
 {
   // headphone detect
@@ -183,6 +216,13 @@ static void check_headphones()
     unmute_spk();
     headset_connected = false;
   }
+}
+
+/* polls volume buttons */
+static void check_buttons()
+{
+  vol_down_pressed = !gpio_read(VOL_DN);
+  vol_up_pressed   = !gpio_read(VOL_UP);
 }
 
 int main(void)
@@ -342,12 +382,10 @@ int main(void)
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x21, 0x4E); // De-pop, power on = 800 ms, step time = 4ms
 
-  codec_write(0x24, hp_vol); // HPL output analog volume, set = 0 dB
-  codec_write(0x25, hp_vol); // HPR output analog volume, set = 0 dB
-  codec_write(0x26, spk_vol); // SPL output analog volume, set = 0 dB
-  codec_write(0x27, spk_vol); // SPR output analog volume, set = 0 dB
+  set_hp_vol(hp_vol);
+  set_spk_vol(spk_vol);
 
-  // muting controlled right at driver
+  // mute everything at first
   mute_hp();
   mute_spk();
 
@@ -368,47 +406,44 @@ int main(void)
     if (analog_vol_ctrl) {
       // read analog volume wheel
     } else { // digital volume control
-      if (!gpio_read(VOL_DN)) {
-        if (!gpio_read(VOL_UP)) { // both vol buttons pressed. MUTE/UNMUTE
+      check_buttons();
+      if (vol_down_pressed) {
+        if (vol_up_pressed) { // both vol buttons pressed. MUTE/UNMUTE
           toggle_mute();
           _delay_ms(50);
-          while (!gpio_read(VOL_DN) && !gpio_read(VOL_UP)); // wait for buttons to be released
+          while (vol_down_pressed && vol_up_pressed) { check_buttons(); } // wait for buttons to be released
         } else { // decrease volume
           if (!mute) {
             if (headset_connected) {
               if (hp_vol < min_vol) {
                 hp_vol += 2;
-                codec_write(0x24, hp_vol); // HPL analog volume
-                codec_write(0x25, hp_vol); // HPR analog volume
+                set_hp_vol(hp_vol);
               }
             } else {
               if (spk_vol < min_vol) {
                 spk_vol += 2;
-                codec_write(0x26, spk_vol); // SPL analog volume
-                codec_write(0x27, spk_vol); // SPR analog volume
+                set_spk_vol(spk_vol);
               }
             }
           }
         }
 
-      } else if (!gpio_read(VOL_UP)) {
-        if (!gpio_read(VOL_DN)) { // both vol buttons pressed. MUTE/UNMUTE
+      } else if (vol_up_pressed) {
+        if (vol_down_pressed) { // both vol buttons pressed. MUTE/UNMUTE
           toggle_mute();
           _delay_ms(50);
-          while (!gpio_read(VOL_DN) && !gpio_read(VOL_UP)); // wait for buttons to be released
+          while (vol_down_pressed && vol_up_pressed) { check_buttons(); } // wait for buttons to be released
         } else { // increase volume
           if (!mute) {
             if (headset_connected) {
               if (hp_vol > max_vol) {
                 hp_vol -= 2;
-                codec_write(0x24, hp_vol); // HPL analog volume
-                codec_write(0x25, hp_vol); // HPR analog volume
+                set_hp_vol(hp_vol);
               }
             } else {
               if (spk_vol > max_vol) {
                 spk_vol -= 2;
-                codec_write(0x26, spk_vol); // SPL analog volume
-                codec_write(0x27, spk_vol); // SPR analog volume
+                set_spk_vol(spk_vol);
               }
             }
           }
@@ -416,6 +451,6 @@ int main(void)
       }
     }
 
-    _delay_ms(30);
+    _delay_ms(50);
   }
 }
