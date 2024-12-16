@@ -35,13 +35,16 @@ static volatile bool mute              = 0;
 static const uint8_t min_vol = 118;
 static const uint8_t max_vol = 0;
 
-static volatile uint8_t spk_vol = 10;
+static const uint8_t spk_gain = 0x30; // +24dB
+static const uint8_t hp_gain  = 0x00; // 0dB
+
+static volatile uint8_t spk_vol = 16;
 static volatile uint8_t hp_vol  = 10;
 
 // GPIO pin definitions
 static const gpio_t RESET  = {&PORTB, 2}; // PB2
-static const gpio_t VOL_UP = {&PORTC, 0}; // PC0
-static const gpio_t VOL_DN = {&PORTC, 1}; // PC1
+static const gpio_t VOL_UP = {&PORTC, 1}; // PC1
+static const gpio_t VOL_DN = {&PORTC, 0}; // PC0
 static const gpio_t A_MODE = {&PORTC, 2}; // PC2 (analog vol ctrl mode)
 
 static const gpio_t MODE0 = {&PORTA, 4}; // PA4
@@ -65,7 +68,7 @@ static void gpio_init()
   gpio_pullup(MODE2);
   gpio_pullup(MODE3);
 
-  if (!gpio_read(A_MODE)) { // enable analog volume control mode
+  if (gpio_read(A_MODE)) { // enable analog volume control mode
 
     analog_vol_ctrl = true;
 
@@ -109,11 +112,20 @@ static void codec_reset()
   gpio_set_high(RESET);
 }
 
+static void set_dac_gain(uint8_t gain)
+{
+  // digital gain
+  codec_write(0x00, 0x00); // select page 0
+  codec_write(0x41, gain); // DAC -> +24dB gain left
+  codec_write(0x42, gain); // DAC -> +24dB gain right
+}
+
 static void mute_spk()
 {
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x2A, 0x00); // SPL driver mute
   codec_write(0x2B, 0x00); // SPR driver mute
+  // codec_write(0x20, 0x06); // power down class D drivers
 }
 
 static void mute_hp()
@@ -121,11 +133,13 @@ static void mute_hp()
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x28, 0x02); // HPL driver mute
   codec_write(0x29, 0x02); // HPR driver mute
+  // codec_write(0x1F, 0x04); // power down headphone drivers
 }
 
 static void unmute_spk()
 {
   codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x20, 0xC6); // power up class D drivers
   codec_write(0x2A, 0x04); // SPL driver unmute
   codec_write(0x2B, 0x04); // SPR driver unmute
 }
@@ -133,19 +147,41 @@ static void unmute_spk()
 static void unmute_hp()
 {
   codec_write(0x00, 0x01); // Select page 1
+  codec_write(0x1F, 0xC4); // power up headphone drivers
   codec_write(0x28, 0x06); // HPL driver unmute
   codec_write(0x29, 0x06); // HPR driver unmute
 }
 
 static void toggle_mute()
 {
-  mute != mute;
+  mute = !mute;
   if (mute) {
-    mute_spk();
-    mute_hp();
+    if (headset_connected)
+      mute_hp();
+    else
+      mute_spk();
   } else {
-    unmute_spk();
+    if (headset_connected)
+      unmute_hp();
+    else
+      unmute_spk();
+  }
+}
+
+static void check_headphones()
+{
+  // headphone detect
+  codec_write(0x00, 0x00); // select page 0
+  if (codec_read(0x43) & 1 << 5) { // if headset is connected...
+    mute_spk();
+    set_dac_gain(hp_gain);
     unmute_hp();
+    headset_connected = true;
+  } else { // if headset is not connected...
+    mute_hp();
+    set_dac_gain(spk_gain);
+    unmute_spk();
+    headset_connected = false;
   }
 }
 
@@ -172,6 +208,8 @@ int main(void)
   _delay_ms(10);
 
   uint8_t mode = mode_detect();
+
+  mode = 0b0001;
 
   switch (mode) {
     case 0b0000:
@@ -269,6 +307,13 @@ int main(void)
 
     case 0b1111:
       // ???? mode
+      // SNES mode (debug)
+      codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
+      codec_write(0x05, 0x00); // PLL powered off.
+
+      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     default:
@@ -284,11 +329,11 @@ int main(void)
     codec_write(0x74, 0x00); // DAC -> volume control pin disable
     codec_write(0x44, 0x00); // DAC -> DRC disable
 
-    // digital gain
-    codec_write(0x41, 0xf0); // DAC -> +24dB gain left
-    codec_write(0x42, 0xf0); // DAC -> +24dB gain right
+    codec_write(0x00, 0x01); // Select page 1
 
-    codec_write(0x23, 0b01000100); // DAC outputs routed to mixers
+    codec_write(0x23, 0x44); // DAC outputs routed to mixers
+
+    codec_write(0x00, 0x00); // select page 0
 
     codec_write(0x3F, 0xD6); // power up DACs and enable data paths
     codec_write(0x40, 0x00); // unmute DAC left and right channels
@@ -297,16 +342,14 @@ int main(void)
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x21, 0x4E); // De-pop, power on = 800 ms, step time = 4ms
 
-  codec_write(0x24, 0x88); // HPL output analog volume, set = 0 dB
-  codec_write(0x25, 0x88); // HPR output analog volume, set = 0 dB
-  codec_write(0x26, 0x80); // SPL output analog volume, set = 0 dB
-  codec_write(0x27, 0x80); // SPR output analog volume, set = 0 dB
+  codec_write(0x24, hp_vol); // HPL output analog volume, set = 0 dB
+  codec_write(0x25, hp_vol); // HPR output analog volume, set = 0 dB
+  codec_write(0x26, spk_vol); // SPL output analog volume, set = 0 dB
+  codec_write(0x27, spk_vol); // SPR output analog volume, set = 0 dB
 
   // muting controlled right at driver
-  codec_write(0x28, 0x04); // HPL driver mute
-  codec_write(0x29, 0x04); // HPR driver mute
-  codec_write(0x2A, 0x00); // SPL driver mute
-  codec_write(0x2B, 0x00); // SPR driver mute
+  mute_hp();
+  mute_spk();
 
   codec_write(0x2E, 0x0B); // Micbias set to AVDD (for HPS pull-up)
 
@@ -314,30 +357,13 @@ int main(void)
 
   codec_write(0x43, 0x93); // headset detection enabled
 
+  check_headphones();
+
   // Main loop
   while (1) {
 
-    // headphone detect
-    codec_write(0x00, 0x00); // select page 0
-    if (codec_read(0x43) & 1 << 5) { // if headset is connected...
-      if (headset_connected == false) { // ...and wasn't already connected
-        codec_write(0x0, 0x01); // Select page 1
-        mute_spk();
-        codec_write(0x20, 0x06); // power down class D drivers
-        codec_write(0x1F, 0xC4); // power up headphone drivers
-        unmute_hp();
-        headset_connected = true;
-      }
-    } else { // if headset is not connected...
-      if (headset_connected == true) { // ...and was previously connected
-        codec_write(0x0, 0x01); // Select page 1
-        mute_hp();
-        codec_write(0x1F, 0x04); // power down headphone drivers
-        codec_write(0x20, 0xC6); // power up class D drivers
-        unmute_spk();
-        headset_connected = false;
-      }
-    }
+    if (!mute)
+      check_headphones();
 
     if (analog_vol_ctrl) {
       // read analog volume wheel
@@ -390,6 +416,6 @@ int main(void)
       }
     }
 
-    _delay_ms(100);
+    _delay_ms(30);
   }
 }
