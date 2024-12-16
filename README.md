@@ -1,6 +1,6 @@
 <picture> <source media="(prefers-color-scheme: dark)" srcset="images/logo.png"> <img src="images/logo_black.png" width="300"> </picture> 
 
-Scampi is a truly universal OSHW audio amp for portablizers. Hardware design is tested and working. Firmware still WIP.
+Scampi is a truly universal OSHW audio amp for portablizers. Hardware design is tested and working. Firmware is nearly complete.
 
 <img src="images/scampi_new.png" width="800"> 
 
@@ -15,9 +15,23 @@ Features:
   
 <img src="images/layout.png" width="400">
 
-Hardware TESTED AND WORKING! Firmware in progress. Planned modes:
+Hardware tested and working! Firmware is nearly complete! Supported modes so far:
 
-<img src="images/modes.jpg" width="341"> 
+- [ ] Analog input
+- [x] SNES
+- [x] N64
+- [ ] GameCube
+- [ ] Wii
+- [ ] Wii U
+- [ ] PS1
+- [ ] PS2
+- [ ] PS3
+- [ ] Saturn
+- [ ] Dreamcast
+- [ ] XBOX
+- [ ] Xbox 360
+- [ ] Jaguar
+- [ ] Neo Geo
 
 ## License
 Solderpad Hardware License v2.1
