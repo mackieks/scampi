@@ -21,13 +21,13 @@ Hardware tested and working! Firmware is nearly complete! Supported modes so far
 - [x] SNES
 - [x] N64
 - [ ] GameCube
-- [ ] Wii
+- [x] Wii
 - [ ] Wii U
 - [ ] PS1
 - [ ] PS2
 - [ ] PS3
 - [ ] Saturn
-- [ ] Dreamcast
+- [x] Dreamcast
 - [ ] XBOX
 - [ ] Xbox 360
 - [ ] Jaguar
