@@ -15,6 +15,10 @@ Features:
   
 <img src="images/layout.png" width="400">
 
+Recommended speakers: [iPhone 14 Pro Max Bottom Loudspeaker](https://www.aliexpress.us/item/3256806952513064.html)
+
+Headphone jack (remove pegs with flush cutters): [pink PJ320D](https://www.aliexpress.us/item/3256801753865202.html)
+
 Hardware tested and working! Firmware is nearly complete! Supported modes so far:
 
 - [ ] Analog input
