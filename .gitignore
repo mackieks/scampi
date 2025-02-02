@@ -4,3 +4,9 @@ KiCAD/fp-info-cache
 /KiCAD/scampi-backups
 KiCAD/jig/fp-info-cache
 /hardware/KiCAD/scampi-backups
+hardware/KiCAD/fp-info-cache
+hardware/KiCAD/fp-info-cache
+hardware/KiCAD/ibom.config.ini
+hardware/KiCAD/scampi.kicad_prl
+*.kicad_prl
+*.lck

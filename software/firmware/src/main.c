@@ -76,7 +76,7 @@ static void gpio_init()
   gpio_input(MODE2);
   gpio_input(MODE3);
 
-  if (!gpio_read(A_MODE)) { // enable analog volume control mode
+  if (gpio_read(A_MODE)) { // enable analog volume control mode
 
     analog_vol_ctrl = true;
 
@@ -287,8 +287,8 @@ int main(void)
       codec_write(0x05, 0x00); // PLL powered off.
 
       codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
-      codec_write(0x0B, 0x84); // NDAC is powered and set to 1
-      codec_write(0x0C, 0x84); // MDAC is powered and set to 2
+      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b0101:
@@ -308,13 +308,13 @@ int main(void)
       break;
 
     case 0b0111:
-      // Dreamcast mode
+      // Dreamcast mode (same as SNES)
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
       codec_write(0x1B, 0x80); // right justified, 16 bit
-      codec_write(0x0B, 0x84); // NDAC is powered and set to 1
-      codec_write(0x0C, 0x84); // MDAC is powered and set to 2
+      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b1000:
@@ -347,11 +347,11 @@ int main(void)
 
     case 0b1111:
       // ???? mode
-      // SNES mode (debug)
+      // Wii mode
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
-      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
       codec_write(0x0B, 0x81); // NDAC is powered and set to 1
       codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
