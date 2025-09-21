@@ -23,9 +23,9 @@
 #include "i2c/tlv320aic3110.h"
 
 // speaker type (controls gain)
-#define IPHONE_15PM 1
+#define IPHONE_15PM 0
 #define CMS_151135 0
-#define FOUR_OHM_20MM 0
+#define FOUR_OHM_20MM 1
 
 static volatile bool analog_vol_ctrl   = 0;
 static volatile bool headset_connected = 0;
@@ -38,7 +38,7 @@ static const uint8_t min_vol = 118;
 static const uint8_t max_vol = 0;
 
 #ifdef IPHONE_15PM
-static const uint8_t spk_gain = 0x30; // +24dB
+static const uint8_t spk_gain = 0x24; // +24dB
 #elif CMS_151135
 static const uint8_t spk_gain = 0x20; // +16dB
 #elif FOUR_OHM_20MM
@@ -249,8 +249,6 @@ int main(void)
 
   uint8_t mode = mode_detect();
 
-  mode = 0b0001;
-
   switch (mode) {
     case 0b0000:
       // analog mode
@@ -273,12 +271,19 @@ int main(void)
       codec_write(0x05, 0b10010011); // PLL power up
 
       codec_write(0x1B, 0x80); // right justified, 16 bit
-      codec_write(0x0B, 0x84); // NDAC is powered and set to 1
-      codec_write(0x0C, 0x84); // MDAC is powered and set to 2
+      codec_write(0x0B, 0x84); // NDAC is powered and set to 4
+      codec_write(0x0C, 0x84); // MDAC is powered and set to 4
       break;
 
     case 0b0011:
       // GC mode
+      codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
+      codec_write(0x05, 0b10010010); // PLL powered up. P = 1, R = 2
+      codec_write(0x06, 0b00100000); // J = 32
+
+      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x0B, 0x84); // NDAC is powered and set to 4
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b0100:
@@ -295,12 +300,12 @@ int main(void)
       // Wii U mode
       // same format as Wii but without MCLK?
       codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
-      codec_write(0x05, 0b10010100); // PLL powered up. P = 1, R = 4
-      codec_write(0x06, 0b00000111); // J = 7
+      codec_write(0x05, 0b10010010); // PLL powered up. P = 1, R = 2
+      codec_write(0x06, 0b00010000); // J = 16
 
       codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
-      codec_write(0x0B, 0b10000010); // NDAC powered up. NDAC = 2
-      codec_write(0x0C, 0b10000111); // MDAC powered up. MDAC = 7
+      codec_write(0x0B, 0x84); // NDAC is powered and set to 4
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b0110:
@@ -346,14 +351,7 @@ int main(void)
       break;
 
     case 0b1111:
-      // ???? mode
-      // Wii mode
-      codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
-      codec_write(0x05, 0x00); // PLL powered off.
-
-      codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
-      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
-      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
+      // ????
       break;
 
     default:

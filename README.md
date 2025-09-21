@@ -24,9 +24,9 @@ Hardware tested and working! Firmware is nearly complete! Supported modes so far
 - [ ] Analog input
 - [x] SNES
 - [x] N64
-- [ ] GameCube
+- [x] GameCube
 - [x] Wii
-- [ ] Wii U
+- [x] Wii U
 - [ ] PS1
 - [ ] PS2
 - [ ] PS3
