@@ -50,6 +50,8 @@ static const uint8_t hp_gain = 0x00; // 0dB (suitable for my 15Ω headphones)
 static volatile uint8_t spk_vol = 16;
 static volatile uint8_t hp_vol  = 10;
 
+static volatile uint16_t vol_pot = 0; // analog volume pot reading (0 - 1023)
+
 // GPIO pin definitions
 static const gpio_t RESET  = {&PORTB, 2}; // PB2
 static const gpio_t VOL_UP = {&PORTC, 1}; // PC1
@@ -76,19 +78,6 @@ static void gpio_init()
   gpio_input(MODE2);
   gpio_input(MODE3);
 
-  if (gpio_read(A_MODE)) { // enable analog volume control mode
-
-    analog_vol_ctrl = true;
-
-    // ADC on VOL_DN (PC0)
-    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
-    ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
-    ADC1.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PC0
-    ADC1.COMMAND = 0b1; // start conversion
-  } else {
-    gpio_pullup(VOL_DN);
-  }
-
   // internal pullups for IO pins
   gpio_pullup(VOL_UP);
   gpio_pullup(A_MODE);
@@ -96,6 +85,19 @@ static void gpio_init()
   gpio_pullup(MODE1);
   gpio_pullup(MODE2);
   gpio_pullup(MODE3);
+
+  if (!gpio_read(A_MODE)) { // enable analog volume control mode
+
+    analog_vol_ctrl = true;
+
+    // ADC1 on VOL_DN (PC0)
+    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
+    ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
+    ADC1.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PC0
+    ADC1.COMMAND = 0b1; // start conversion
+  } else {
+    gpio_pullup(VOL_DN);
+  }
 }
 
 static uint8_t mode_detect()
@@ -216,6 +218,12 @@ static void check_headphones()
     unmute_spk();
     headset_connected = false;
   }
+}
+
+/* reads analog volume pot */
+static void read_pot()
+{
+  vol_pot = ADC1.RES;
 }
 
 /* polls volume buttons */
@@ -403,6 +411,40 @@ int main(void)
 
     if (analog_vol_ctrl) {
       // read analog volume wheel
+      read_pot();
+
+      // mute if value is below some threshold
+      if (vol_pot < 30) {
+        mute = true;
+        if (headset_connected)
+          mute_hp();
+        else
+          mute_spk();
+      } else {
+        mute = false;
+        if (headset_connected)
+          unmute_hp();
+        else
+          unmute_spk();
+        // map ADC value to volume
+        // (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        uint8_t vol = (vol_pot - 30) * (118) / (1023 - 30);
+
+        // handle volume change
+        if (!mute) {
+          if (headset_connected) {
+            if (hp_vol < min_vol) {
+              hp_vol = vol;
+              set_hp_vol(hp_vol);
+            }
+          } else {
+            if (spk_vol < min_vol) {
+              spk_vol = vol;
+              set_spk_vol(spk_vol);
+            }
+          }
+        }
+      }
     } else { // digital volume control
       check_buttons();
       if (vol_down_pressed) {
@@ -449,6 +491,9 @@ int main(void)
       }
     }
 
-    _delay_ms(50);
+    // in analog volume control mode, we want to sample again ASAP
+    if (!analog_vol_ctrl) {
+      _delay_ms(50);
+    }
   }
 }
