@@ -27,6 +27,15 @@
 #define CMS_151135 0
 #define FOUR_OHM_20MM 1
 
+// set this to 1 to change the volume pot rotation direction
+#define INVERT_VOL_POT 1
+
+// set this to the min and max ADC readings you get from your volume pot
+// for example, if Vmin = 100mV, (0.100 / 3.3) * 1024 = 31
+#define VOL_POT_MIN               30    // ~100mV
+#define VOL_POT_MAX               1010  // ~3.22V
+#define VOL_POT_MUTE_THRESHOLD    20    // Level above/below POT_MIN/POT_MAX to mute at
+
 static volatile bool analog_vol_ctrl   = 0;
 static volatile bool headset_connected = 0;
 static volatile bool mute              = 0;
@@ -47,6 +56,7 @@ static const uint8_t spk_gain = 0x28; // +20dB
 
 static const uint8_t hp_gain = 0x00; // 0dB (suitable for my 15Ω headphones)
 
+static volatile uint8_t vol     = 0;
 static volatile uint8_t spk_vol = 16;
 static volatile uint8_t hp_vol  = 10;
 
@@ -91,7 +101,7 @@ static void gpio_init()
     analog_vol_ctrl = true;
 
     // ADC1 on VOL_DN (PC0)
-    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
+    ADC1.CTRLA   = 0x03; // enable ADC in free-running 10-bit mode
     ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
     ADC1.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PC0
     ADC1.COMMAND = 0b1; // start conversion
@@ -224,6 +234,16 @@ static void check_headphones()
 static void read_pot()
 {
   vol_pot = ADC1.RES;
+
+  if (vol_pot < VOL_POT_MIN)
+    vol_pot = VOL_POT_MIN;
+  else if (vol_pot > VOL_POT_MAX)
+    vol_pot = VOL_POT_MAX;
+}
+
+uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
+{
+  return (uint16_t)((int32_t)(x - in_min) * (int32_t)(out_max - out_min) / (int32_t)(in_max - in_min) + out_min);
 }
 
 /* polls volume buttons */
@@ -413,8 +433,9 @@ int main(void)
       // read analog volume wheel
       read_pot();
 
-      // mute if value is below some threshold
-      if (vol_pot < 30) {
+      // mute if value is beyond threshold
+      if (INVERT_VOL_POT ? vol_pot > (VOL_POT_MAX - VOL_POT_MUTE_THRESHOLD)
+                         : vol_pot < (VOL_POT_MIN + VOL_POT_MUTE_THRESHOLD)) {
         mute = true;
         if (headset_connected)
           mute_hp();
@@ -427,8 +448,10 @@ int main(void)
         else
           unmute_spk();
         // map ADC value to volume
-        // (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-        uint8_t vol = (vol_pot - 30) * (118) / (1023 - 30);
+        if (INVERT_VOL_POT)
+          vol = map(vol_pot, VOL_POT_MIN, VOL_POT_MAX, 0, 118);
+        else
+          vol = map(vol_pot, VOL_POT_MIN, VOL_POT_MAX, 118, 0);
 
         // handle volume change
         if (!mute) {
