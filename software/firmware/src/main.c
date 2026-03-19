@@ -353,7 +353,13 @@ int main(void)
   codec_write(0x01, 0x01); // soft reset
   _delay_ms(10);
 
+  // Set TLV320AIC3110 timer to use internal oscillator
+  // Required for headphone detection to work without MCLK
+  codec_write(0x0, 0x3); //  select page 3
+  codec_write(0x10, 0x08); // select internal oscillator
+
   uint8_t mode = mode_detect();
+  codec_write(0x0, 0x0); //  select page 0
 
   switch (mode) {
     case 0b0000:
@@ -536,15 +542,11 @@ int main(void)
         // handle volume change
         if (!mute) {
           if (headset_connected) {
-            if (hp_vol < min_vol) {
-              hp_vol = vol;
-              set_hp_vol(hp_vol);
-            }
+            hp_vol = vol;
+            set_hp_vol(hp_vol);
           } else {
-            // if (spk_vol < min_vol) {
             spk_vol = vol;
             set_spk_vol(spk_vol);
-            // }
           }
         }
       }
