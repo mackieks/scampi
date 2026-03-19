@@ -22,19 +22,25 @@
 #include "i2c.h"
 #include "i2c/tlv320aic3110.h"
 
+// old PCB has A_MODE tied to GND.
+#define FORCE_AMODE 0
+
 // speaker type (controls gain)
-#define IPHONE_15PM 0
+#define IPHONE_15PM 1
 #define CMS_151135 0
-#define FOUR_OHM_20MM 1
+#define FOUR_OHM_20MM 0
 
 // set this to 1 to change the volume pot rotation direction
-#define INVERT_VOL_POT 1
+#define INVERT_VOL_POT 0
+
+// RTC millisecond counter
+static volatile uint32_t millis = 0;
 
 // set this to the min and max ADC readings you get from your volume pot
 // for example, if Vmin = 100mV, (0.100 / 3.3) * 1024 = 31
-#define VOL_POT_MIN               30    // ~100mV
-#define VOL_POT_MAX               1010  // ~3.22V
-#define VOL_POT_MUTE_THRESHOLD    20    // Level above/below POT_MIN/POT_MAX to mute at
+static volatile uint8_t VOL_POT_MIN    = 128; // real value comes from eeprom
+static volatile uint8_t VOL_POT_MAX    = 128; // real value comes from eeprom
+static volatile uint8_t MUTE_THRESHOLD = 3; // Adjustable threshold above/below POT_MIN/POT_MAX to mute at
 
 static volatile bool analog_vol_ctrl   = 0;
 static volatile bool headset_connected = 0;
@@ -43,11 +49,11 @@ static volatile bool vol_down_pressed  = 0;
 static volatile bool vol_up_pressed    = 0;
 
 // higher value = reduced gain (see Table 7-38 in datasheet)
-static const uint8_t min_vol = 118;
+static const uint8_t min_vol = 50;
 static const uint8_t max_vol = 0;
 
 #ifdef IPHONE_15PM
-static const uint8_t spk_gain = 0x24; // +24dB
+static const uint8_t spk_gain = 0x30; // +24dB
 #elif CMS_151135
 static const uint8_t spk_gain = 0x20; // +16dB
 #elif FOUR_OHM_20MM
@@ -57,10 +63,10 @@ static const uint8_t spk_gain = 0x28; // +20dB
 static const uint8_t hp_gain = 0x00; // 0dB (suitable for my 15Ω headphones)
 
 static volatile uint8_t vol     = 0;
-static volatile uint8_t spk_vol = 16;
-static volatile uint8_t hp_vol  = 10;
+static volatile uint8_t spk_vol = 0;
+static volatile uint8_t hp_vol  = 0;
 
-static volatile uint16_t vol_pot = 0; // analog volume pot reading (0 - 1023)
+static volatile uint8_t vol_pot = 0; // analog volume pot reading (0 - 255)
 
 // GPIO pin definitions
 static const gpio_t RESET  = {&PORTB, 2}; // PB2
@@ -73,6 +79,47 @@ static const gpio_t MODE1 = {&PORTA, 5}; // PA5
 static const gpio_t MODE2 = {&PORTA, 6}; // PA6
 static const gpio_t MODE3 = {&PORTA, 7}; // PA7
 
+// Initialize the RTC for periodic interrupts
+void rtc_init()
+{
+  RTC.CLKSEL     = RTC_CLKSEL_INT32K_gc;
+  RTC.PITINTCTRL = RTC_PI_bm;
+  RTC.PITCTRLA   = RTC_PERIOD_CYC32_gc | RTC_PITEN_bm;
+}
+
+// Handle periodic RTC interrupts (every ~1ms)
+ISR(RTC_PIT_vect)
+{
+  // Clear the interrupt flag
+  RTC.PITINTFLAGS = RTC_PI_bm;
+
+  // Update the "milliseconds since boot" counter
+  millis++;
+}
+
+// Force reset eeprom for debug
+static void reset_eeprom()
+{
+  // Write the default pot min and max values
+  eeprom_write_byte(0x00, 0x80); // VOL_POT_MIN
+  eeprom_write_byte(0x01, 0x80); // VOL_POT_MAX
+}
+
+// Initialize the EEPROM if it has never been initialized
+static void eeprom_init()
+{
+  // Return early if the EEPROM has already been initialized
+  if (eeprom_read_word(0xFE) == 0xCAFE)
+    return;
+
+  // Write the default pot min and max values
+  eeprom_write_byte(0x00, 0x80); // VOL_POT_MIN
+  eeprom_write_byte(0x01, 0x80); // VOL_POT_MAX
+
+  // Write the signature
+  eeprom_write_word(0xFE, 0xCAFE);
+}
+
 // Initialize the GPIO pins
 static void gpio_init()
 {
@@ -80,7 +127,6 @@ static void gpio_init()
   gpio_output(RESET);
   gpio_set_low(RESET);
 
-  gpio_input(VOL_UP);
   gpio_input(VOL_DN);
   gpio_input(A_MODE);
   gpio_input(MODE0);
@@ -89,23 +135,33 @@ static void gpio_init()
   gpio_input(MODE3);
 
   // internal pullups for IO pins
-  gpio_pullup(VOL_UP);
+
   gpio_pullup(A_MODE);
   gpio_pullup(MODE0);
   gpio_pullup(MODE1);
   gpio_pullup(MODE2);
   gpio_pullup(MODE3);
 
-  if (!gpio_read(A_MODE)) { // enable analog volume control mode
+  if (FORCE_AMODE ? true : !gpio_read(A_MODE)) { // enable analog volume control mode
 
     analog_vol_ctrl = true;
 
     // ADC1 on VOL_DN (PC0)
-    ADC1.CTRLA   = 0x03; // enable ADC in free-running 10-bit mode
-    ADC1.CTRLC   = 0x01010000; // reduced capacitance mode, set VREF to VDD
+    ADC1.CTRLA   = 0x07; // enable ADC in free-running 8-bit mode
+    ADC1.CTRLC   = 0x01010011; // reduced capacitance mode, set VREF to VDD, div16 prescaler
     ADC1.MUXPOS  = ADC_MUXPOS_AIN6_gc; // select PC0
     ADC1.COMMAND = 0b1; // start conversion
+
+    gpio_output(VOL_UP); // use VOL_UP to power the volume pot
+    gpio_set_high(VOL_UP);
+
+    // grab VOL_POT_MIN and VOL_POT_MAX from EEPROM
+    VOL_POT_MIN = eeprom_read_byte(0x00);
+    VOL_POT_MAX = eeprom_read_byte(0x01);
+
   } else {
+    gpio_input(VOL_UP); // use VOL_UP for a button
+    gpio_pullup(VOL_UP);
     gpio_pullup(VOL_DN);
   }
 }
@@ -230,20 +286,33 @@ static void check_headphones()
   }
 }
 
-/* reads analog volume pot */
+/* reads analog volume pot and performs wheel limit calibration */
 static void read_pot()
 {
-  vol_pot = ADC1.RES;
+  vol_pot = ADC1.RESL;
 
-  if (vol_pot < VOL_POT_MIN)
-    vol_pot = VOL_POT_MIN;
-  else if (vol_pot > VOL_POT_MAX)
-    vol_pot = VOL_POT_MAX;
+  // run wheel limit calibration for first 3s after power-on
+  if (millis < 5000) {
+    if (vol_pot < VOL_POT_MIN) {
+      VOL_POT_MIN = vol_pot;
+      eeprom_update_byte(0x00, VOL_POT_MIN);
+    }
+    if (vol_pot > VOL_POT_MAX) {
+      VOL_POT_MAX = vol_pot;
+      eeprom_update_byte(0x01, VOL_POT_MAX);
+    }
+  } else {
+    // catch miscalibration
+    if (vol_pot > VOL_POT_MAX)
+      vol_pot = VOL_POT_MAX;
+    if (vol_pot < VOL_POT_MIN)
+      vol_pot = VOL_POT_MIN;
+  }
 }
 
-uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
+long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
-  return (uint16_t)((int32_t)(x - in_min) * (int32_t)(out_max - out_min) / (int32_t)(in_max - in_min) + out_min);
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 /* polls volume buttons */
@@ -261,6 +330,15 @@ int main(void)
 
   // Enable interrupts
   sei();
+
+  // reset_eeprom for debug
+  // reset_eeprom();
+
+  // Initialize eeprom if first boot
+  eeprom_init();
+
+  // Initialize the RTC (millis timer)
+  rtc_init();
 
   // Initalize the GPIOs
   gpio_init();
@@ -434,8 +512,8 @@ int main(void)
       read_pot();
 
       // mute if value is beyond threshold
-      if (INVERT_VOL_POT ? vol_pot > (VOL_POT_MAX - VOL_POT_MUTE_THRESHOLD)
-                         : vol_pot < (VOL_POT_MIN + VOL_POT_MUTE_THRESHOLD)) {
+      if (INVERT_VOL_POT ? vol_pot < (VOL_POT_MIN + MUTE_THRESHOLD) 
+                         : vol_pot > (VOL_POT_MAX - MUTE_THRESHOLD)) {
         mute = true;
         if (headset_connected)
           mute_hp();
@@ -448,10 +526,12 @@ int main(void)
         else
           unmute_spk();
         // map ADC value to volume
-        if (INVERT_VOL_POT)
-          vol = map(vol_pot, VOL_POT_MIN, VOL_POT_MAX, 0, 118);
-        else
-          vol = map(vol_pot, VOL_POT_MIN, VOL_POT_MAX, 118, 0);
+        // 2. Handle inversion logic
+        if (INVERT_VOL_POT) {
+          vol = map(vol_pot, VOL_POT_MIN + MUTE_THRESHOLD, VOL_POT_MAX, min_vol, max_vol);
+        } else {
+          vol = map(vol_pot, VOL_POT_MIN, VOL_POT_MAX - MUTE_THRESHOLD, max_vol, min_vol);
+        }
 
         // handle volume change
         if (!mute) {
@@ -461,10 +541,10 @@ int main(void)
               set_hp_vol(hp_vol);
             }
           } else {
-            if (spk_vol < min_vol) {
-              spk_vol = vol;
-              set_spk_vol(spk_vol);
-            }
+            // if (spk_vol < min_vol) {
+            spk_vol = vol;
+            set_spk_vol(spk_vol);
+            // }
           }
         }
       }
