@@ -26,7 +26,8 @@
 #define FORCE_AMODE 0
 
 // speaker type (controls gain)
-#define IPHONE_15PM 1
+#define IPHONE_15PM 0
+#define SWITCH_2 1
 #define CMS_151135 0
 #define FOUR_OHM_20MM 0
 
@@ -36,11 +37,13 @@
 // RTC millisecond counter
 static volatile uint32_t millis = 0;
 
+static volatile uint8_t mode = 0;
+
 // set this to the min and max ADC readings you get from your volume pot
 // for example, if Vmin = 100mV, (0.100 / 3.3) * 1024 = 31
 static volatile uint8_t VOL_POT_MIN    = 128; // real value comes from eeprom
 static volatile uint8_t VOL_POT_MAX    = 128; // real value comes from eeprom
-static volatile uint8_t MUTE_THRESHOLD = 3; // Adjustable threshold above/below POT_MIN/POT_MAX to mute at
+static volatile uint8_t MUTE_THRESHOLD = 1; // Adjustable threshold above/below POT_MIN/POT_MAX to mute at
 
 static volatile bool analog_vol_ctrl   = 0;
 static volatile bool headset_connected = 0;
@@ -54,6 +57,8 @@ static const uint8_t max_vol = 0;
 
 #ifdef IPHONE_15PM
 static const uint8_t spk_gain = 0x30; // +24dB
+#elif SWITCH_2
+static const uint8_t spk_gain = 0x27; // +20dB
 #elif CMS_151135
 static const uint8_t spk_gain = 0x20; // +16dB
 #elif FOUR_OHM_20MM
@@ -168,7 +173,6 @@ static void gpio_init()
 
 static uint8_t mode_detect()
 {
-  uint8_t mode = 0;
 
   mode |= !gpio_read(MODE0);
   mode |= !gpio_read(MODE1) << 1;
@@ -240,16 +244,28 @@ static void unmute_spk()
 {
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x20, 0xC6); // power up class D drivers
-  codec_write(0x2A, 0x04); // SPL driver unmute
-  codec_write(0x2B, 0x04); // SPR driver unmute
+
+  if (mode == 0) { // analog input mode needs higher SPx driver gain
+    codec_write(0x2A, 0b00011100); // SPL driver unmute, +24dB gain
+    codec_write(0x2B, 0b00011100); // SPR driver unmute, +24dB gain
+  } else { // digital input modes use digital volume control
+    codec_write(0x2A, 0x04); // SPL driver unmute, +6dB gain
+    codec_write(0x2B, 0x04); // SPR driver unmute, +6dB gain
+  }
 }
 
 static void unmute_hp()
 {
   codec_write(0x00, 0x01); // Select page 1
   codec_write(0x1F, 0xC4); // power up headphone drivers
-  codec_write(0x28, 0x06); // HPL driver unmute
-  codec_write(0x29, 0x06); // HPR driver unmute
+
+  if (mode == 0) { // analog input mode needs higher SPx driver gain
+    codec_write(0x28, 0b00101110); // HPL driver unmute, +8dB gain
+    codec_write(0x29, 0b00101110); // HPR driver unmute, +8dB gain
+  } else { // digital input modes use digital volume control
+    codec_write(0x28, 0b00010110); // HPL driver unmute, +2dB gain
+    codec_write(0x29, 0b00010110); // HPR driver unmute, +2dB gain
+  }
 }
 
 static void toggle_mute()
@@ -358,7 +374,7 @@ int main(void)
   codec_write(0x0, 0x3); //  select page 3
   codec_write(0x10, 0x08); // select internal oscillator
 
-  uint8_t mode = mode_detect();
+  mode = mode_detect();
   codec_write(0x0, 0x0); //  select page 0
 
   switch (mode) {
@@ -474,7 +490,9 @@ int main(void)
   // finish up amp init
 
   if (mode == 0) { // analog mode
+    codec_write(0x00, 0x01); // Select page 1
     codec_write(0x23, 0b00100010); // analog inputs routed to mixers
+
   } else { // digital modes
     codec_write(0x74, 0x00); // DAC -> volume control pin disable
     codec_write(0x44, 0x00); // DAC -> DRC disable
