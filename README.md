@@ -21,7 +21,7 @@ Headphone jack (remove pegs with flush cutters): [pink PJ320D](https://www.aliex
 
 Hardware tested and working! Firmware is nearly complete! Supported modes so far:
 
-- [ ] Analog input
+- [x] Analog input
 - [x] SNES
 - [x] N64
 - [x] GameCube
