@@ -15,9 +15,9 @@ Features:
   
 <img src="images/layout.png" width="400">
 
-Recommended speakers: [iPhone 14 Pro Max Bottom Loudspeaker](https://www.aliexpress.us/item/3256806952513064.html)
+Recommended speakers: [Nintendo Switch 2 speakers](https://www.aliexpress.us/item/3256809887996046.html)
 
-Headphone jack (remove pegs with flush cutters): [pink PJ320D](https://www.aliexpress.us/item/3256801753865202.html)
+Headphone jack (remove pegs with flush cutters): [PJ320D](https://www.aliexpress.us/item/3256808202284065.html)
 
 Hardware tested and working! Firmware is nearly complete! Supported modes so far:
 
@@ -30,7 +30,7 @@ Hardware tested and working! Firmware is nearly complete! Supported modes so far
 - [ ] PS1
 - [ ] PS2
 - [ ] PS3
-- [ ] Saturn
+- [x] Saturn
 - [x] Dreamcast
 - [ ] XBOX
 - [ ] Xbox 360
