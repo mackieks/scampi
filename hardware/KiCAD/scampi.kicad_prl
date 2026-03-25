@@ -45,7 +45,7 @@
       "drc_warnings",
       "shapes"
     ],
-    "visible_layers": "00000000_00000000_0f501420_575555f5",
+    "visible_layers": "00000000_00000000_0f501420_575555f0",
     "zone_display_mode": 0
   },
   "git": {
@@ -116,7 +116,7 @@
   "schematic": {
     "hierarchy_collapsed": [],
     "selection_filter": {
-      "graphics": true,
+      "graphics": false,
       "images": true,
       "labels": true,
       "lockedItems": false,
