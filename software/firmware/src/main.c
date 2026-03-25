@@ -56,9 +56,9 @@ static const uint8_t min_vol = 50;
 static const uint8_t max_vol = 0;
 
 #ifdef IPHONE_15PM
-static const uint8_t spk_gain = 0x30; // +24dB
+static const uint8_t spk_gain = 0x20; // +24dB
 #elif SWITCH_2
-static const uint8_t spk_gain = 0x27; // +20dB
+static const uint8_t spk_gain = 0x20; // +20dB
 #elif CMS_151135
 static const uint8_t spk_gain = 0x20; // +16dB
 #elif FOUR_OHM_20MM
@@ -246,8 +246,8 @@ static void unmute_spk()
   codec_write(0x20, 0xC6); // power up class D drivers
 
   if (mode == 0) { // analog input mode needs higher SPx driver gain
-    codec_write(0x2A, 0b00011100); // SPL driver unmute, +24dB gain
-    codec_write(0x2B, 0b00011100); // SPR driver unmute, +24dB gain
+    codec_write(0x2A, 0b00001100); // SPL driver unmute, +24dB gain
+    codec_write(0x2B, 0b00001100); // SPR driver unmute, +24dB gain
   } else { // digital input modes use digital volume control
     codec_write(0x2A, 0x04); // SPL driver unmute, +6dB gain
     codec_write(0x2B, 0x04); // SPR driver unmute, +6dB gain
@@ -378,13 +378,24 @@ int main(void)
   codec_write(0x0, 0x0); //  select page 0
 
   switch (mode) {
+
+      // SNES, Saturn and Dreamcast all work with the same amp config. However, since their digital signal levels are
+      // different, I'm keeping separate modes for each console. This lets me dial in the DAC gain for each console
+      // without more compile-time flags.
+
     case 0b0000:
       // analog mode
       codec_write(0x3F, 0b00000010); // power down DACs and disable data paths
       break;
 
     case 0b0001:
+
       // SNES mode
+      // • 24-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 32kHz
+      // • C (SCK / BCLK): 1.536MHz (32kHz * 2ch * 24 bit frame size)
+      // • M (MCLK): 8.192MHz (256Fs = 256 * 32kHz)
+
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
@@ -395,19 +406,40 @@ int main(void)
 
     case 0b0010:
       // N64 mode
+      // • 16-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 48kHz
+      // • C (SCK / BCLK): 1.536MHz (48kHz * 2ch * 16 bit frame size)
+      // • no MCLK
+      // TODO: apparently the sample rate changes from 32kHz to 22kHz in 1080 Snowboarding 2P mode
+
       codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
-      codec_write(0x05, 0b10010011); // PLL power up
+      codec_write(0x05, 0b10010011); // PLL powered up. P = 1, R = 3.
+      // J defaults to 4
 
       codec_write(0x1B, 0x80); // right justified, 16 bit
       codec_write(0x0B, 0x84); // NDAC is powered and set to 4
       codec_write(0x0C, 0x84); // MDAC is powered and set to 4
+
+      // to test (384kHz oversampling)
+      // codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
+      // codec_write(0x05, 0b10010000); // PLL powered up. P = 1, R = 16
+      // // J defaults to 4
+
+      // codec_write(0x1B, 0x80); // right justified, 16 bit
+      // codec_write(0x0B, 0x82); // NDAC is powered and set to 2
+      // codec_write(0x0C, 0x81); // MDAC is powered and set to 1
       break;
 
     case 0b0011:
       // GC mode
+      // • 16-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 48kHz
+      // • C (SCK / BCLK): 1.536MHz (48kHz * 2ch * 16 bit frame size)
+      // • no MCLK
+
       codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
       codec_write(0x05, 0b10010010); // PLL powered up. P = 1, R = 2
-      codec_write(0x06, 0b00100000); // J = 32
+      codec_write(0x06, 0b00100000); // J = 32 for 2x oversampling
 
       codec_write(0x1B, 0x80); // right justified, 16 bit
       codec_write(0x0B, 0x84); // NDAC is powered and set to 4
@@ -416,6 +448,11 @@ int main(void)
 
     case 0b0100:
       // Wii mode
+      // • 32-bit frame size, 32-bit word size, left-justified
+      // • W (WS / LRCLK / FS): 48kHz
+      // • C (SCK / BCLK): 3.072MHz (48kHz * 2ch * 32 bit frame size)
+      // • M (MCLK): 12.228MHz (256Fs = 256 * 48kHz)
+
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
@@ -426,10 +463,14 @@ int main(void)
 
     case 0b0101:
       // Wii U mode
-      // same format as Wii but without MCLK?
+      // • 32-bit frame size, 32-bit word size, left-justified
+      // • W (WS / LRCLK / FS): 48kHz
+      // • C (SCK / BCLK): 3.072MHz (48kHz * 2ch * 32 bit frame size)
+      // • no MCLK
+
       codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
       codec_write(0x05, 0b10010010); // PLL powered up. P = 1, R = 2
-      codec_write(0x06, 0b00010000); // J = 16
+      codec_write(0x06, 0b00010000); // J = 16 for 2x oversampling
 
       codec_write(0x1B, 0xF0); // supposed to be left justified 32-bit
       codec_write(0x0B, 0x84); // NDAC is powered and set to 4
@@ -438,10 +479,26 @@ int main(void)
 
     case 0b0110:
       // Saturn mode
+      // • 32-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 44.1kHz
+      // • C (SCK / BCLK): 2.8224MHz (44.1kHz * 2ch * 32 bit frame size)
+      // • M (MCLK): 11.2896 (256Fs = 256 * 44.1kHz)
+
+      codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
+      codec_write(0x05, 0x00); // PLL powered off.
+
+      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b0111:
-      // Dreamcast mode (same as SNES)
+      // Dreamcast mode
+      // • 32-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 44.1kHz
+      // • C (SCK / BCLK): 2.8224MHz (44.1kHz * 2ch * 32 bit frame size)
+      // • M (MCLK): 11.2896 (256Fs = 256 * 44.1kHz)
+
       codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
       codec_write(0x05, 0x00); // PLL powered off.
 
