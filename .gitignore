@@ -10,3 +10,4 @@ hardware/KiCAD/ibom.config.ini
 hardware/KiCAD/scampi.kicad_prl
 *.kicad_prl
 *.lck
+hardware/KiCAD/.history/
