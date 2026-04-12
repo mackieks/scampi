@@ -55,10 +55,10 @@ static volatile bool vol_up_pressed    = 0;
 static const uint8_t min_vol = 50;
 static const uint8_t max_vol = 0;
 
-#ifdef IPHONE_15PM
-static const uint8_t spk_gain = 0x20; // +24dB
+#if IPHONE_15PM
+static const uint8_t spk_gain = 0x0; // +24dB
 #elif SWITCH_2
-static const uint8_t spk_gain = 0x20; // +20dB
+static const uint8_t spk_gain = 0x0; // +20dB
 #elif CMS_151135
 static const uint8_t spk_gain = 0x20; // +16dB
 #elif FOUR_OHM_20MM
@@ -183,9 +183,7 @@ static uint8_t mode_detect()
 }
 
 static void codec_write(int reg, int value)
-{
-  i2c_reg_write_byte(TLV320_ADDR, reg, value);
-}
+{ i2c_reg_write_byte(TLV320_ADDR, reg, value); }
 
 volatile int codec_read(int reg)
 {
@@ -246,11 +244,11 @@ static void unmute_spk()
   codec_write(0x20, 0xC6); // power up class D drivers
 
   if (mode == 0) { // analog input mode needs higher SPx driver gain
-    codec_write(0x2A, 0b00001100); // SPL driver unmute, +24dB gain
-    codec_write(0x2B, 0b00001100); // SPR driver unmute, +24dB gain
+    codec_write(0x2A, 0b00011100); // SPL driver unmute, +24dB gain
+    codec_write(0x2B, 0b00011100); // SPR driver unmute, +24dB gain
   } else { // digital input modes use digital volume control
-    codec_write(0x2A, 0x04); // SPL driver unmute, +6dB gain
-    codec_write(0x2B, 0x04); // SPR driver unmute, +6dB gain
+    codec_write(0x2A, 0b00011100); // SPL driver unmute, +6dB gain
+    codec_write(0x2B, 0b00011100); // SPR driver unmute, +6dB gain
   }
 }
 
@@ -263,8 +261,8 @@ static void unmute_hp()
     codec_write(0x28, 0b00101110); // HPL driver unmute, +8dB gain
     codec_write(0x29, 0b00101110); // HPR driver unmute, +8dB gain
   } else { // digital input modes use digital volume control
-    codec_write(0x28, 0b00010110); // HPL driver unmute, +2dB gain
-    codec_write(0x29, 0b00010110); // HPR driver unmute, +2dB gain
+    codec_write(0x28, 0b00001110); // HPL driver unmute, +2dB gain
+    codec_write(0x29, 0b00001110); // HPR driver unmute, +2dB gain
   }
 }
 
@@ -327,9 +325,7 @@ static void read_pot()
 }
 
 long map(long x, long in_min, long in_max, long out_min, long out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
+{ return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min; }
 
 /* polls volume buttons */
 static void check_buttons()
@@ -379,8 +375,8 @@ int main(void)
 
   switch (mode) {
 
-      // SNES, Saturn and Dreamcast all work with the same amp config. However, since their digital signal levels are
-      // different, I'm keeping separate modes for each console. This lets me dial in the DAC gain for each console
+      // SNES, Saturn, Dreamcast, and PS! all work with the same amp config. However, since their digital signal levels
+      // are different, I'm keeping separate modes for each console. This lets me dial in the DAC gain for each console
       // without more compile-time flags.
 
     case 0b0000:
@@ -509,6 +505,17 @@ int main(void)
 
     case 0b1000:
       // PS1 mode
+      // • 32-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 44.1kHz
+      // • C (SCK / BCLK): 2.8224MHz (44.1kHz * 2ch * 32 bit frame size)
+      // • M (MCLK): 11.2896 (256Fs = 256 * 44.1kHz)
+
+      codec_write(0x04, 0x00); // PLL_CLKIN = MCLK, CODEC_CLKIN = MCLK
+      codec_write(0x05, 0x00); // PLL powered off.
+
+      codec_write(0x1B, 0b10110000); // right justified, 16 bit
+      codec_write(0x0B, 0x81); // NDAC is powered and set to 1
+      codec_write(0x0C, 0x82); // MDAC is powered and set to 2
       break;
 
     case 0b1001:
@@ -533,6 +540,20 @@ int main(void)
 
     case 0b1110:
       // NEOGEO mode
+      // • 24-bit frame size, 16-bit word size, right-justified
+      // • W (WS / LRCLK / FS): 55.56kHz
+      // • C (SCK / BCLK): 2.667MHz (55.56kHz * 2ch * 24 bit frame size)
+      // • no MCLK
+
+      codec_write(0x04, 0b00000111); // PLL_CLKIN = BCLK, CODEC_CLKIN = PLL_CLK
+      codec_write(0x05, 0b10010011); // PLL powered up. P = 1, R = 3.
+      // J defaults to 4
+
+      codec_write(0x1B, 0x80); // right justified, 16 bit
+      codec_write(0x0B, 0x84); // NDAC is powered and set to 4
+      codec_write(0x0C, 0x84); // MDAC is powered and set to 4
+
+      break;
       break;
 
     case 0b1111:
